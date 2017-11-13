@@ -44,7 +44,16 @@ export default class UserStore {
 
         });
       };
-  
+
+      logOut() {
+        return new Promise((resolve, reject) => {
+          axios.post('/logout').then((res) => {
+            this.user = null
+            resolve();
+          })
+        }
+        )
+      }   
 
   testDb(){
     return new Promise((resolve, reject) => {

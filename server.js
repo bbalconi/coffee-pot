@@ -62,10 +62,14 @@ function(email, password, done){
 )); 
 
 passport.serializeUser(function (user, done) {
+  console.log(user)
+  console.log('*******')
   done(null, user.id);
 })
 
 passport.deserializeUser(function (id, done) {
+  console.log(id)
+  console.log('&&&&&&')
   User.findById(id, function (err, user) {
     if (err) {
     } else {
@@ -112,6 +116,12 @@ app.post('/postcup', (req, res, next) => {
   pool.query(query, (err) => {
     if (err) throw err; 
     });
+});
+
+app.post('/logout', (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.redirect('/');
 });
 
 app.get("/", function(req, res, next) {

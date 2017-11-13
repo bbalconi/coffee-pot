@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import ReactPasswordStrength from 'react-password-strength'; 
+import ReactPasswordStrength from 'react-password-strength';
 import { Grid, Cell, TextField, Button } from 'react-md';
-import './SignUp.css'; 
-import { inject, observer } from 'mobx-react';   
+import './SignUp.css';
+import { inject, observer } from 'mobx-react';
 var axios = require('axios');
 
 var SignUp = observer(class SignUp extends Component {
@@ -45,9 +45,9 @@ var SignUp = observer(class SignUp extends Component {
       })
     }
   }
-// change these to one function
+  // change these to one function
   inputfirstNameChange(e) {
-    this.setState({ firstName: e }); 
+    this.setState({ firstName: e });
   }
   inputlastNameChange(e) {
     this.setState({ lastName: e });
@@ -72,82 +72,72 @@ var SignUp = observer(class SignUp extends Component {
     return (
       <div>
         <Grid className="grid-example">
-      <Cell size={12} tabletSize={12}>  
-      
-      <TextField
-            id="firstName"
-            label="First Name"
-            lineDirection="center"
-            placeholder="Jane" 
-            onChange={this.inputfirstNameChange} 
-            value={this.state.firstName} 
-            name="firstName"   
-          /></Cell>
-      <Cell size={12} tabletSize={12}>
-      
-      <TextField
+          <Cell size={12} tabletSize={12}>
+            <TextField
+              id="firstName"
+              label="First Name"
+              lineDirection="center"
+              placeholder="Jane"
+              onChange={this.inputfirstNameChange}
+              value={this.state.firstName}
+              name="firstName"
+            /></Cell>
+          <Cell size={12} tabletSize={12}>
+            <TextField
               id="lastName"
               label="Last Name"
               lineDirection="center"
               placeholder="Smith"
-              
-              onChange={this.inputlastNameChange} 
-              value={this.state.lastName} 
-              name="lastName"   
-            />
 
-      </Cell>
-    
-      <Cell size={12} tabletSize={12}>
-      
-      
-      <TextField
+              onChange={this.inputlastNameChange}
+              value={this.state.lastName}
+              name="lastName"
+            />
+          </Cell>
+          <Cell size={12} tabletSize={12}>
+            <TextField
               id="email"
               label="Email"
               lineDirection="center"
-              placeholder="you@something.com" 
-              onChange={this.inputemailChange} 
-              value={this.state.email} 
-              name="email"   
+              placeholder="you@something.com"
+              onChange={this.inputemailChange}
+              value={this.state.email}
+              name="email"
             />
-            
-            </Cell>
-      <Cell size={12} tabletSize={12}>
-      
-      <ReactPasswordStrength
-                value={this.state.password}
-                changeCallback={this.changeCallback}
-                minLength={5}
-                minScore={2}
-                type="Password"
-                label="Password"
-                scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
-                inputProps={{ placeholder: "abc123", autoComplete: "off" }}
-              /> 
-
-      </Cell>
-      <Cell size={12} phoneSize={12}><TextField
-              id="password"
-              label="Confirm Password"
-              lineDirection="center"
-              placeholder="abc123" 
-              onChange={this.confirmPassword} 
-              value={this.state.confirmPassword} 
-              name="password" 
-              type="password"  
-              onKeyPress={this._handleKeyPress} 
-            /></Cell>
-          
-    </Grid>
-    <Grid>
-      <Cell size={12} phoneSize={12}>
-      <p>{this.state.message}</p>
-      <Button raised primary onClick={this.handleSignup}>Submit</Button>
-      </Cell>
-    </Grid>
+          </Cell>
+          <Cell size={12} tabletSize={12}>
+            <ReactPasswordStrength
+              value={this.state.password}
+              changeCallback={this.changeCallback}
+              minLength={5}
+              minScore={2}
+              type="Password"
+              label="Password"
+              scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
+              inputProps={{ placeholder: "abc123", autoComplete: "off" }}
+            />
+          </Cell>
+          <Cell size={12} phoneSize={12}><TextField
+            id="password"
+            label="Confirm Password"
+            lineDirection="center"
+            placeholder="abc123"
+            onChange={this.confirmPassword}
+            value={this.state.confirmPassword}
+            name="password"
+            type="password"
+            onKeyPress={this._handleKeyPress}
+          /></Cell>
+        </Grid>
+        <Grid>
+          <Cell size={12} phoneSize={12}>
+            <p>{this.state.message}</p>
+            <Button raised primary onClick={this.handleSignup}>Submit</Button>
+          </Cell>
+        </Grid>
       </div>
     );
- 
+
   };
 });
 

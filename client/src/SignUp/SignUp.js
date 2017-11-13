@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Button, Col, CardSubtitle, FormGroup, Label, Input, Card, CardBody, CardTitle } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
-import ReactPasswordStrength from 'react-password-strength';
-import { inject, observer } from 'mobx-react';  
+import ReactPasswordStrength from 'react-password-strength'; 
+import { Grid, Cell, TextField, Button } from 'react-md';
+import './SignUp.css'; 
+import { inject, observer } from 'mobx-react';   
 var axios = require('axios');
 
 var SignUp = observer(class SignUp extends Component {
@@ -43,22 +44,22 @@ var SignUp = observer(class SignUp extends Component {
         })
       })
     }
-    }
-
-  inputfirstNameChange(event) {
-    this.setState({ firstName: event.target.value });
   }
-  inputlastNameChange(event) {
-    this.setState({ lastName: event.target.value });
+// change these to one function
+  inputfirstNameChange(e) {
+    this.setState({ firstName: e }); 
   }
-  inputemailChange(event) {
-    this.setState({ email: event.target.value });
+  inputlastNameChange(e) {
+    this.setState({ lastName: e });
+  }
+  inputemailChange(e) {
+    this.setState({ email: e });
   }
   changeCallback(event) {
     this.setState({ password: event.password });
   }
-  confirmPassword(event) {
-    this.setState({ confirmPassword: event.target.value });
+  confirmPassword(e) {
+    this.setState({ confirmPassword: e });
   }
 
   _handleKeyPress(e) {
@@ -69,46 +70,85 @@ var SignUp = observer(class SignUp extends Component {
 
   render() {
     return (
-      <div className="signup">
-        <Col className='signup-col'></Col>
-        <Card className="signup-card">
-          <CardBody>
-            <CardTitle className="signup-title"> Sign Up</CardTitle>
-            <FormGroup className="signup-input">
-              <Label for="firstName">First Name:</Label>{' '}
-              <Input type="text" onChange={this.inputfirstNameChange} value={this.state.firstName} name="firstName" id="firstName" placeholder="John" />
-            </FormGroup>
-            <FormGroup className="signup-input">
-              <Label for="lastName">Last Name:</Label>{' '}
-              <Input type="text" onChange={this.inputlastNameChange} value={this.state.lastName} name="lastName" id="lastName" placeholder="Doe" />
-            </FormGroup>
-            <FormGroup className="signup-input">
-              <Label for="email">Email:</Label>{' '}
-              <Input type="email" onChange={this.inputemailChange} value={this.state.email} name="email" id="email" placeholder="you@something.com" />
-            </FormGroup>
-            {' '}
-            <FormGroup className="signup-input">
-              <Label for="password">Password:</Label>{' '}
-              <ReactPasswordStrength
+      <div>
+        <Grid className="grid-example">
+      <Cell size={12} tabletSize={12}>  
+      
+      <TextField
+            id="firstName"
+            label="First Name"
+            lineDirection="center"
+            placeholder="Jane" 
+            onChange={this.inputfirstNameChange} 
+            value={this.state.firstName} 
+            name="firstName"   
+          /></Cell>
+      <Cell size={12} tabletSize={12}>
+      
+      <TextField
+              id="lastName"
+              label="Last Name"
+              lineDirection="center"
+              placeholder="Smith"
+              
+              onChange={this.inputlastNameChange} 
+              value={this.state.lastName} 
+              name="lastName"   
+            />
+
+      </Cell>
+    
+      <Cell size={12} tabletSize={12}>
+      
+      
+      <TextField
+              id="email"
+              label="Email"
+              lineDirection="center"
+              placeholder="you@something.com" 
+              onChange={this.inputemailChange} 
+              value={this.state.email} 
+              name="email"   
+            />
+            
+            </Cell>
+      <Cell size={12} tabletSize={12}>
+      
+      <ReactPasswordStrength
                 value={this.state.password}
                 changeCallback={this.changeCallback}
                 minLength={5}
                 minScore={2}
+                type="Password"
+                label="Password"
                 scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
-                inputProps={{ placeholder: "abc123", autoComplete: "off", className: "form-control" }}
-              />
-            </FormGroup>
-            <FormGroup className="signup-input">
-              <Label for="password">Confirm Password:</Label>{' '}
-              <Input type="password" onChange={this.confirmPassword} value={this.state.confirmPassword} name="password" id="password" placeholder="abc123" onKeyPress={this._handleKeyPress} />
-            </FormGroup>
-            <CardSubtitle style={{ color: 'red' }}>{this.state.message}</CardSubtitle><br />
-            <Button className="signup-button" onClick={this.handleSignup}>Submit</Button>
-          </CardBody>
-        </Card>
+                inputProps={{ placeholder: "abc123", autoComplete: "off" }}
+              /> 
+
+      </Cell>
+      <Cell size={12} phoneSize={12}><TextField
+              id="password"
+              label="Confirm Password"
+              lineDirection="center"
+              placeholder="abc123" 
+              onChange={this.confirmPassword} 
+              value={this.state.confirmPassword} 
+              name="password" 
+              type="password"  
+              onKeyPress={this._handleKeyPress} 
+            /></Cell>
+          
+    </Grid>
+    <Grid>
+      <Cell size={12} phoneSize={12}>
+      <p>{this.state.message}</p>
+      <Button raised primary onClick={this.handleSignup}>Submit</Button>
+      </Cell>
+    </Grid>
       </div>
     );
+ 
   };
 });
 
-export default withRouter(inject('userStore')(SignUp));
+export default withRouter(inject('userStore')(SignUp)); 

@@ -29,6 +29,22 @@ export default class UserStore {
       )
     }
 
+    submitLogin(a, b) {
+      return new Promise((resolve, reject) => {
+        axios.post('/login', {
+          username: a,
+          password: b,
+        }).then((res) => {
+          if (res.data.success) {
+            this.setState({
+              currentUser: res.data
+            });
+          }
+          resolve(res.data);
+        });
+      });
+    }
+  
 
   testDb(){
     return new Promise((resolve, reject) => {

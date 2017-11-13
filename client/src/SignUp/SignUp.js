@@ -48,7 +48,6 @@ var SignUp = observer(class SignUp extends Component {
 // change these to one function
   inputfirstNameChange(e) {
     this.setState({ firstName: e }); 
-    }
   }
   inputlastNameChange(e) {
     this.setState({ lastName: e });

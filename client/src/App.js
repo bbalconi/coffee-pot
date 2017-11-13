@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import SignUp from './SignUp/SignUp';
+import Homepage from './Homepage/Homepage';
+import {
+  BrowserRouter as Router,
+  Route,
+} from 'react-router-dom';
 var axios = require('axios');
 
 class App extends Component {
@@ -14,8 +20,8 @@ class App extends Component {
 
   testDb(){
     return new Promise((resolve, reject) => {
-    axios.post('/test', {
-      cupcount: 10,
+    axios.post('/postcup', {
+      cupcount: 3,
       userid: 2,
     }).then((res) => {
       if (res) {
@@ -36,15 +42,12 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <Router>
+        <div>
+          <Route exact path='/' render={() => <Homepage /> }/>
+          <Route  path='/signup' render={() => <SignUp /> }/>
+        </div>
+      </Router>
     );
   }
 }

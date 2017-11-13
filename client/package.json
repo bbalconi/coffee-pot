@@ -4,9 +4,13 @@
   "private": true,
   "dependencies": {
     "axios": "^0.17.1",
+    "bootstrap": "^4.0.0-beta",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
-    "react-scripts": "1.0.17"
+    "react-password-strength": "^2.2.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.17",
+    "reactstrap": "^5.0.0-alpha.3"
   },
   "scripts": {
     "start": "react-scripts start",

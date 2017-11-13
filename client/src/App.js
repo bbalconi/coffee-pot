@@ -7,47 +7,28 @@ import {
   BrowserRouter as Router,
   Route,
 } from 'react-router-dom';
+import {Provider} from "mobx-react"
+import UserStore from "./Stores/UserStore";
 var axios = require('axios');
 
 class App extends Component {
   constructor(){
     super()
-    this.testDb = this.testDb.bind(this)
     this.state = {
       data: null,
     }
   }
 
-  testDb(){
-    return new Promise((resolve, reject) => {
-    axios.post('/postcup', {
-      cupcount: 3,
-      userid: 2,
-    }).then((res) => {
-      if (res) {
-        this.setState({
-          data: res
-        })
-      } else {
-        reject('Response undefined')
-      }
-      resolve(res);
-    })
-  })  
-}
-
-  componentDidMount(){
-    this.testDb()
-  }
-
   render() {
     return (
-      <Router>
-        <div>
-          <Route exact path='/' render={() => <Homepage /> }/>
-          <Route  path='/signup' render={() => <SignUp /> }/>
-        </div>
-      </Router>
+       <Provider userStore={new UserStore()}> 
+        <Router>
+          <div>
+            <Route exact path='/' render={() => <Homepage /> }/>
+            <Route  path='/signup' render={() => <SignUp /> }/>
+          </div>
+        </Router>
+      </Provider>
     );
   }
 }

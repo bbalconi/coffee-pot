@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import ReactPasswordStrength from 'react-password-strength';
+import ReactPasswordStrength from 'react-password-strength'; 
 import { Grid, Cell, TextField, Button } from 'react-md';
-import './SignUp.css';
+import './SignUp.css'; 
+import { inject, observer } from 'mobx-react';   
 var axios = require('axios');
 
-class SignUp extends Component {
+var SignUp = observer(class SignUp extends Component {
   constructor() {
     super();
+    this.handleSignup = this.handleSignup.bind(this);
     this.inputfirstNameChange = this.inputfirstNameChange.bind(this);
     this.inputlastNameChange = this.inputlastNameChange.bind(this);
     this.inputemailChange = this.inputemailChange.bind(this);
-    this.handleSignup = this.handleSignup.bind(this);
     this.changeCallback = this.changeCallback.bind(this);
     this.confirmPassword = this.confirmPassword.bind(this);
-    this.submitSignup = this.submitSignup.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
     this.state = {
       firstName: '',
@@ -27,53 +27,28 @@ class SignUp extends Component {
     }
   }
 
-  submitSignup(signupObj) {
-    return new Promise((resolve, reject) => {
-      axios.post('/signup', {
-        firstName: signupObj.firstName,
-        lastName: signupObj.lastName,
-        email: signupObj.email,
-        password: signupObj.password,
-      }).then((userObj) => {
-        this.setState({
-          firstName: '',
-          lastName: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-          message: userObj.data.message,
-          success: userObj.data.success
-        })
-        resolve();
-      }
-        )
-    })
-  }
-
   handleSignup() {
     if (this.state.password === this.state.confirmPassword) {
       return new Promise((resolve, reject) => {
-        this.submitSignup({
+        this.props.userStore.submitSignup({
           firstName: this.state.firstName,
           lastName: this.state.lastName,
           email: this.state.email,
           password: this.state.password,
-        }).then((res) => {
-          if (this.state.success) {
+        }).then(() => {
+          console.log(this.props.userStore.user)
+          if (this.props.userStore.user != null) {
             this.props.history.push("/login");
           }
           resolve();
         })
       })
-    } else {
-      this.setState({
-        message: 'Passwords do not match'
-      })
     }
   }
 // change these to one function
   inputfirstNameChange(e) {
-    this.setState({ firstName: e });
+    this.setState({ firstName: e }); 
+    }
   }
   inputlastNameChange(e) {
     this.setState({ lastName: e });
@@ -173,8 +148,8 @@ class SignUp extends Component {
     </Grid>
       </div>
     );
-  }
+ 
+  };
+});
 
-
-}
-export default withRouter(SignUp);
+export default withRouter(inject('userStore')(SignUp)); 

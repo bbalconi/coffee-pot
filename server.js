@@ -75,22 +75,18 @@ passport.deserializeUser(function (id, done) {
 })
 
 app.post('/signup', (req, res, next) => {
-  // let query = "INSERT INTO users (firstname, lastname, email, password) values ('" + req.body.firstName + "', '" + req.body.lastName + "', '" + req.body.email + "', '" + passwordHash.generate(req.body.password) + "')";
-
-  let query = `INSERT INTO users (firstname, lastname, email, password) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}')`  
-
-  pool.query(query, (err) => {
-    console.log(query)
+ let query = `INSERT INTO users (firstname, lastname, email, password) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}') RETURNING id, firstname, lastname, email`  
+  pool.query(query, (err, user) => {
   if (err) throw err;
-    res.json('Added user!');
+    console.log(user.rows)
+    res.json(user.rows);
   });    
 });
 
 app.post('/postcup', (req, res, next) => {
-  let query = 'INSERT INTO history (cupcount, status, userid) values (' + req.body.cupcount + ', ' + 0 + ', ' + req.body.userid + ')';
+  let query = `INSERT INTO history (cupcount, status, userid) values ('${req.body.cupcount}', '${req.body.status}', '${req.body.userid}')`;
   pool.query(query, (err) => {
     if (err) throw err; 
-      res.json("inserted!");
     });
 });
 

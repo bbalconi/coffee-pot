@@ -11,12 +11,13 @@ var passwordHash = require("password-hash");
 var cookieParser = require('cookie-parser');
 var http = require('http');
 var path  = require('path');
+const { Pool } = require('pg');
 require('dotenv').config();
 
-const pool = new pool({
+const pool = new Pool({
   user: process.env.ELEPHANT_DB_USER,
   host: 'baasu.db.elephantsql.com',
-  database: process.env.ELEPHANT_DB_PASSWORD,
+  database: process.env.ELEPHANT_DB_USER,
   password: process.env.ELEPHANT_DB_PASSWORD,
   port: 5432
 });
@@ -32,13 +33,7 @@ var allowedOrigins = "http://localhost:* http://127.0.0.1:* http://potluck-react
 var ioServer = io(server, {
   origins: allowedOrigins
 });
-mongoose.connect(mongooseUri, options);
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  console.log('Item database connected.');
-});
-
+ 
 app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSession({ secret: "moby" }));
@@ -46,28 +41,28 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-passport.use(new LocalStrategy({ username: "email", password: "password" },  (email, password, done) => {
-  User.findOne({
-    email: email
-  }, (err, foundUser) => {
+// needs to be called username 
+passport.use(new LocalStrategy({email: 'username', password: 'password'},
+function(email, password, done){
+  // hit the db and do some matching
+  let query = 'SELECT * from users where email = \'' + email + '\'';
+  pool.query(query, function(err, user, fields) {
     if (err) {
-      console.log(err);
-      next(err);
-    } else if (foundUser == null){
-      return done('Something went wrong! Please try again', null)
+      return done(err, null); // null for no user
     } else {
-      if (passwordHash.verify(password, foundUser.password)) {
-        return done(null, foundUser);
+      if (user.rows[0] && passwordHash.verify(password, user.rows[0].password)){
+        return done(null, user.rows[0]);
       } else {
-        return done("password and username don't match", null);
+        // additional test and error handling here
+        return done("Password and username don't match", null)
       }
     }
-  })
-})
-)
+  });
+  }
+)); 
 
 passport.serializeUser(function (user, done) {
-  done(null, user._id);
+  done(null, user.id);
 })
 
 passport.deserializeUser(function (id, done) {
@@ -78,6 +73,19 @@ passport.deserializeUser(function (id, done) {
     }
   })
 })
+
+app.post('/test', (req, res, next) => {
+  let query = 'INSERT INTO history (cupcount, status, userid) values (' + req.body.cupcount + ', ' + 2 + ', ' + req.body.userid + ')';
+  console.log(query);
+  pool.query(query, (err) => {
+    if (err) throw err; 
+      res.json("inserted!");
+    });
+});
+
+app.get("/", function(req, res, next) {
+  res.send("connected!");
+});
 
 var port = process.env.PORT || 5000;
 server.listen(port, () => {

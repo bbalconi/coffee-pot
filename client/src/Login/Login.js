@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Col, Button, CardSubtitle, FormGroup, Label, Input, Card, CardBody, CardTitle } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
-import './Login.css';
+import { inject, observer } from 'mobx-react';  
 
-class Login extends Component {
+var Login = observer(class Login extends Component {
   constructor() {
     super();
     this.inputemailChange = this.inputemailChange.bind(this);
     this.inputpasswordChange = this.inputpasswordChange.bind(this);
-    this.testFunc = this.testFunc.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
     this.state = {
       email: '',
@@ -23,23 +23,18 @@ class Login extends Component {
     this.setState({ password: event.target.value });
   }
 
-  testFunc(a, b) {
-    this.props.userStore.submitLogin(a, b).then((user) => {
-      if (user.found) {
+  handleLogin(a, b) {
+    this.props.userStore.submitLogin(a, b).then(() => {
+        console.log(this.props.userStore.user);
+        if (this.props.userStore.user.found) {
         this.props.history.push("/main");
-      } else {
-        this.setState({
-          message: user.message
-        })
       }
-    }, (e) => {
-      console.log(e);
-    });
-  }
+      })
+    }
 
   _handleKeyPress(e) {
     if (e.key === "Enter") {
-      this.testFunc(this.state.email, this.state.password);
+      this.handleLogin(this.state.email, this.state.password);
     }
   }
   render() {
@@ -60,12 +55,12 @@ class Login extends Component {
               <Input className='login-input' type="password" onChange={this.inputpasswordChange} value={this.state.password} name="password" id="password" onKeyPress={this._handleKeyPress} />
             </FormGroup>
             {' '}
-            <Button className="login-button" onClick={() => this.testFunc(this.state.email, this.state.password)} >Submit</Button>
+            <Button className="login-button" onClick={() => this.handleLogin(this.state.email, this.state.password)} >Submit</Button>
           </CardBody>
         </Card>
       </div>
     );
   };
-}
+})
 
-export default withRouter(Login);
+export default withRouter(inject('userStore')(Login));

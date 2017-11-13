@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
 import Homepage from './Homepage/Homepage';
 import {
@@ -26,6 +27,7 @@ class App extends Component {
           <div>
             <Route exact path='/' render={() => <Homepage /> }/>
             <Route  path='/signup' render={() => <SignUp /> }/>
+            <Route path='/login' render={() => <Login /> }/>
           </div>
         </Router>
       </Provider>

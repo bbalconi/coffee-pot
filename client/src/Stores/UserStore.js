@@ -35,15 +35,15 @@ export default class UserStore {
           username: a,
           password: b,
         }).then((res) => {
+          console.log(res);
           if (res.data.success) {
-            this.setState({
-              currentUser: res.data
-            });
-          }
-          resolve(res.data);
+            this.user = res.data
+            resolve();
+            }
+          })
+
         });
-      });
-    }
+      };
   
 
   testDb(){

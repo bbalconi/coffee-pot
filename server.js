@@ -74,6 +74,30 @@ passport.deserializeUser(function (id, done) {
   })
 })
 
+app.post('/login', function (req, res, next) {
+  passport.authenticate('local', function (err, user) {
+    if (err) {
+      res.json({ found: false, success: false, err: true, message: err });
+    } else if (user) {
+      req.logIn(user, (err) => {
+        console.log(user)
+        if (err) {
+          console.log(err);
+          next(err);
+          res.json({ found: true, success: false, message: err })
+        } else {
+          res.json({ found: true, success: true, firstName: user.firstname, lastName: user.lastname })
+        }
+      })
+    } else {
+      res.json({ found: false, success: false, message: "Something went wrong!" })
+    }
+  })(req, res, next);
+  var email = req.body.email;
+  var password = req.body.password;
+});
+
+
 app.post('/signup', (req, res, next) => {
  let query = `INSERT INTO users (firstname, lastname, email, password) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}') RETURNING id, firstname, lastname, email`  
   pool.query(query, (err, user) => {

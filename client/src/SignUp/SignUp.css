@@ -1,0 +1,10 @@
+.ReactPasswordStrength .ReactPasswordStrength-strength-desc { width: auto;}
+.ReactPasswordStrength {
+  border: 0;
+  box-sizing: border-box;
+  color: #090809;
+  font-family: initial;
+  font-size: 18px;
+  line-height: 1;
+  position: relative;
+}

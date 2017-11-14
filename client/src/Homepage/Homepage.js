@@ -19,12 +19,17 @@ var Homepage = observer(class Homepage extends Component {
   }
   
   render() {
+    if (this.props.userStore.user) {
     return (
       <div>
         Hello, {this.props.userStore.user.firstName} !
         <Button onClick={this.clientLogOut}/>
       </div>
-    );
+    )} else {
+      return(
+        <div>Not logged in</div>
+      )
+    }
   }
 })
 

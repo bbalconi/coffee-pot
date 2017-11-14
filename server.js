@@ -76,9 +76,36 @@ passport.deserializeUser((id, done) => {
   })
   })
 
+  ioServer.on('connection', (client) => {
+    console.log('connected')
+    client.on('connect', (coffee) => {
+      console.log('is it working? ' + coffee)
+      client.join(coffee);
+    });
 
+    client.on('/postcup', (data) => {
+      console.log(data)
+      let query = `SELECT * FROM history where userid = 33`
+      pool.query(query, (err, rows) => {
+        if (rows.rows.length > 0) {
+          let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = 33`
+          pool.query(updateQuery, (err,rows) => {
+            if (err) throw err;
+        })
+      } else {
+          let newQuery = `INSERT INTO history (cupcount, status, userid) values ('${data.cupcount}', 0, 33)`;
+          pool.query(newQuery, (err,rows) => {
+              console.log(rows);
+              if (err) throw err;
+            })
+        }
+        if (err) throw err;
+        });
+    });
+    client.on('disconnect', ()=>{console.log("client disconnected")});
+  });
 
-app.post('/login', function (req, res, next) {
+  app.post('/login', function (req, res, next) {
   passport.authenticate('local', function (err, user) {
     if (err) {
       res.json({ found: false, success: false, err: true, message: err });

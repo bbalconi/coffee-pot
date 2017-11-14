@@ -13,6 +13,7 @@ export default class UserStore {
     axios.post('/socketUrl').then((res) => {
       console.log(res)
       var socketUrl = res.data;
+      this.socket = openSocket(socketUrl)
     })
   };
 
@@ -63,22 +64,13 @@ export default class UserStore {
 
 
   updateCount(){
-    return new Promise((resolve, reject) => {
-      this.user.cupcount = this.user.cupcount + 1;
-    axios.post('/postcup', {
+    console.log(this)
+    console.log(this.socket)
+    this.user.cupcount = this.user.cupcount + 1;
+    this.socket.emit('/postcup', {
       cupcount: this.user.cupcount,
       userid: this.user.id
-    }).then((res) => {
-      if (res) {
-        this.setState({
-          data: res
-        })
-      } else {
-        reject('Response undefined')
-      }
-      resolve(res);
     })
-  })  
-}
+    }
 
 }

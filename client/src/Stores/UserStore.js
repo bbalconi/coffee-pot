@@ -34,12 +34,17 @@ export default class UserStore {
         axios.post('/login', {
           username: a,
           password: b,
-        }).then((res) => {
+        }).then((res, err) => {
+          if (err) throw err;
           console.log(res);
           if (res.data.success) {
             this.user = res.data
-            resolve();
+            resolve(res.data);
+            } else {
+              reject(res.data)
             }
+          }).catch((e)=>{
+            reject(e);
           })
 
         });

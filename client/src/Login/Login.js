@@ -25,12 +25,24 @@ var Login = observer(class Login extends Component {
   }
 
   handleLogin(a, b) {
-    this.props.userStore.submitLogin(a, b).then(() => {
+    console.log('handle login')
+    this.props.userStore.submitLogin(a, b).then((res) => {
         console.log(this.props.userStore.user);
         if (this.props.userStore.user.found) {
         this.props.history.push("/");
+      } else {
+        console.log(this.props.userStore.user.message)
+        this.setState({
+          message: this.props.userStore.user.message
+        })
       }
-      })
+      }).catch(e => {
+        console.log(e);
+        console.log(e.message)
+        this.setState({
+          message: e.message
+        })
+    });
     }
 
   _handleKeyPress(e) {

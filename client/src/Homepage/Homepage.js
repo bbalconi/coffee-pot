@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';  
 import { Button } from 'reactstrap'
-
+var axios = require('axios')
 
 
 var Homepage = observer(class Homepage extends Component {
   constructor(){
     super()
     this.clientLogOut = this.clientLogOut.bind(this)
+    this.socketTest = this.socketTest.bind(this)
+    this.state = {
+      num: 0
+    }
   }
 
   clientLogOut() {
@@ -17,13 +21,27 @@ var Homepage = observer(class Homepage extends Component {
         this.props.history.push("/login");
       })
   }
+
+  socketTest() {
+    axios.post('/postcup', {
+      cupcount: this.state.num + 1,
+      userid: this.props.userStore.user.id
+    }).then((res) => {
+      console.log(res);
+    })
+  }
   
   render() {
     if (this.props.userStore.user) {
     return (
       <div>
         Hello, {this.props.userStore.user.firstName} !
-        <Button onClick={this.clientLogOut}/>
+        <Button onClick={this.clientLogOut}>
+          LogOut
+        </Button>
+        <Button onClick={this.socketTest}>
+        {this.props.userStore.user.cupcount}
+        </Button>
       </div>
     )} else {
       return(

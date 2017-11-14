@@ -33,8 +33,8 @@ export default class UserStore {
           password: b,
         }).then((res, err) => {
           if (err) throw err;
-          console.log(res);
           if (res.data.success) {
+            console.log(res);
             this.user = res.data
             resolve(res.data);
             } else {

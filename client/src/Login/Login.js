@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Col, Button, CardSubtitle, FormGroup, Label, Input, Card, CardBody, CardTitle } from 'reactstrap';
+
+import { Grid, Cell, TextField, Button } from 'react-md';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';  
 
@@ -17,10 +18,10 @@ var Login = observer(class Login extends Component {
     }
   }
   inputemailChange(event) {
-    this.setState({ email: event.target.value });
+    this.setState({ email: event });
   }
   inputpasswordChange(event) {
-    this.setState({ password: event.target.value });
+    this.setState({ password: event });
   }
 
   handleLogin(a, b) {
@@ -39,26 +40,55 @@ var Login = observer(class Login extends Component {
   }
   render() {
     return (
-      <div className='login'>
-        <Col className='space'></Col>
-        <Card className='login-card'>
-          <CardTitle className='login-title'>Login</CardTitle>
-          <CardSubtitle style={{ color: 'red' }}>{this.state.message}</CardSubtitle>
-          <CardBody>
-            <FormGroup className="login-input">
-              <Label for="email">Email</Label>{' '}
-              <Input className='login-input' type="email" onChange={this.inputemailChange} name="email" id="email" placeholder="you@something.com" />
-            </FormGroup>
-            {' '}
-            <FormGroup className="login-input">
-              <Label for="password">Password</Label>{' '}
-              <Input className='login-input' type="password" onChange={this.inputpasswordChange} value={this.state.password} name="password" id="password" onKeyPress={this._handleKeyPress} />
-            </FormGroup>
-            {' '}
-            <Button className="login-button" onClick={() => this.handleLogin(this.state.email, this.state.password)} >Submit</Button>
-          </CardBody>
-        </Card>
-      </div>
+
+
+      <div>
+      <Grid className="grid-example">
+    
+  
+    <Cell size={12} tabletSize={12}>
+    
+    <TextField
+            id="email"
+            label="Email"
+            lineDirection="center"
+            placeholder="you@something.com" 
+            onChange={this.inputemailChange} 
+            value={this.state.email} 
+            name="email"   
+          />
+          
+          </Cell>
+    
+    <Cell size={12} phoneSize={12}>
+    <TextField
+            id="password"
+            label="Confirm Password"
+            lineDirection="center"
+            placeholder="abc123" 
+            onChange={this.inputpasswordChange} 
+            value={this.state.password} 
+            name="password" 
+            type="password"  
+            onKeyPress={this._handleKeyPress} 
+          /></Cell>
+        
+  </Grid>
+  <Grid>
+    <Cell size={12} phoneSize={12}>
+    <p>{this.state.message}</p>
+    <Button raised primary className="login-button" onClick={() => this.handleLogin(this.state.email, this.state.password)} >Submit</Button>
+    </Cell>
+  </Grid>
+    </div>
+
+
+
+
+
+
+
+
     );
   };
 })

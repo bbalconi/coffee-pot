@@ -4,6 +4,7 @@ import './App.css';
 import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
 import Homepage from './Homepage/Homepage';
+import Navbar from './Navbar/Navbar';
 import {
   BrowserRouter as Router,
   Route,
@@ -25,6 +26,7 @@ class App extends Component {
        <Provider userStore={new UserStore()}> 
         <Router>
           <div>
+            <Navbar />
             <Route exact path='/' render={() => <Homepage /> }/>
             <Route  path='/signup' render={() => <SignUp /> }/>
             <Route path='/login' render={() => <Login /> }/>

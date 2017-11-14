@@ -90,7 +90,7 @@ app.post('/login', function (req, res, next) {
           next(err);
           res.json({ found: true, success: false, message: err })
         } else {
-          let query = `SELECT cupcount FROM history WHERE userid = ${user.id} and status = 0`;
+          let query = `SELECT cupcount FROM history WHERE userid = 33 and status = 0`;
           let cupcount = 0;
           pool.query(query, (error, rows) => {
             console.log(query);
@@ -121,7 +121,7 @@ app.post('/signup', (req, res, next) => {
 });
 
 app.post('/postcup', (req, res, next) => {
-  let query = `SELECT * FROM history where userid = ${req.body.userid}`
+  let query = `SELECT * FROM history where userid = 33`
   pool.query(query, (err, rows) => {
     if (rows.rows.length > 0) {
       let updateQuery = `UPDATE history SET cupcount = ${req.body.cupcount} where userid = ${req.body.userid}`

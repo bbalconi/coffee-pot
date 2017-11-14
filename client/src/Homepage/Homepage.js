@@ -23,12 +23,7 @@ var Homepage = observer(class Homepage extends Component {
   }
 
   socketTest() {
-    axios.post('/postcup', {
-      cupcount: this.state.num + 1,
-      userid: this.props.userStore.user.id
-    }).then((res) => {
-      console.log(res);
-    })
+    this.props.userStore.updateCount()
   }
   
   render() {

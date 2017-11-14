@@ -57,11 +57,14 @@ export default class UserStore {
         )
       }   
 
-  testDb(){
+
+  updateCount(){
     return new Promise((resolve, reject) => {
+      this.user.cupcount = this.user.cupcount + 1;
+      console.log(this.user)
     axios.post('/postcup', {
-      cupcount: 3,
-      userid: 2,
+      cupcount: this.user.cupcount,
+      userid: this.user.id
     }).then((res) => {
       if (res) {
         this.setState({

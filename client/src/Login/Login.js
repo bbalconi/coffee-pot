@@ -25,9 +25,7 @@ var Login = observer(class Login extends Component {
   }
 
   handleLogin(a, b) {
-    console.log('handle login')
     this.props.userStore.submitLogin(a, b).then((res) => {
-        console.log(this.props.userStore.user);
         if (this.props.userStore.user.found) {
         this.props.history.push("/");
       } else {

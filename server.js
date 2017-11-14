@@ -83,7 +83,6 @@ app.post('/login', function (req, res, next) {
     if (err) {
       res.json({ found: false, success: false, err: true, message: err });
     } else if (user) {
-      console.log('????')
       req.logIn(user, (err) => {
         if (err) {
           console.log(err);
@@ -93,11 +92,9 @@ app.post('/login', function (req, res, next) {
           let query = `SELECT cupcount FROM history WHERE userid = 33 and status = 0`;
           let cupcount = 0;
           pool.query(query, (error, rows) => {
-            console.log(query);
             cupcount = rows.rows[0].cupcount;
             if (error) throw error;
             res.json({ found: true, success: true, id: user.id, cupcount: cupcount, email: user.email, firstName: user.firstname, lastName: user.lastname })
-            console.log(cupcount);
           })
           
         }
@@ -110,6 +107,13 @@ app.post('/login', function (req, res, next) {
   var password = req.body.password;
 });
 
+app.post('/socketUrl', (req, res)=>{
+  if (process.env.PORT){
+    res.json('https://coffee-pot-pi.herokuapp.com:' + process.env.PORT);
+  } else {
+    res.json('localhost:5000')
+  }
+});
 
 app.post('/signup', (req, res, next) => {
  let query = `INSERT INTO users (firstname, lastname, email, password) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}') RETURNING id, firstname, lastname, email`  

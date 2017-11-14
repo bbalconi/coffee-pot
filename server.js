@@ -62,21 +62,23 @@ function(email, password, done){
 )); 
 
 passport.serializeUser(function (user, done) {
-  console.log(user)
-  console.log('*******')
   done(null, user.id);
 })
 
-passport.deserializeUser(function (id, done) {
+passport.deserializeUser((id, done) => {
   console.log(id)
-  console.log('&&&&&&')
-  User.findById(id, function (err, user) {
-    if (err) {
-    } else {
+  console.log('^^^deserialize^^^')
+  let query = `SELECT * from users where id = ${id}`;
+  pool.query(query, (err, user) => {
+    console.log(query)
+    console.log('------------')
+    console.log(user)
+    if (err) throw err;
+    else {
       done(null, user);
     }
   })
-})
+  })
 
 app.post('/login', function (req, res, next) {
   passport.authenticate('local', function (err, user) {
@@ -84,7 +86,6 @@ app.post('/login', function (req, res, next) {
       res.json({ found: false, success: false, err: true, message: err });
     } else if (user) {
       req.logIn(user, (err) => {
-        console.log(user)
         if (err) {
           console.log(err);
           next(err);
@@ -119,6 +120,8 @@ app.post('/postcup', (req, res, next) => {
 });
 
 app.post('/logout', (req, res) => {
+  console.log(req.body)
+  console.log('logoutter')
   req.logout();
   req.session.destroy();
   res.redirect('/');

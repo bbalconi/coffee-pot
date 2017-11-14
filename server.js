@@ -66,13 +66,8 @@ passport.serializeUser(function (user, done) {
 })
 
 passport.deserializeUser((id, done) => {
-  console.log(id)
-  console.log('^^^deserialize^^^')
   let query = `SELECT * from users where id = ${id}`;
   pool.query(query, (err, user) => {
-    console.log(query)
-    console.log('------------')
-    console.log(user)
     if (err) throw err;
     else {
       done(null, user);

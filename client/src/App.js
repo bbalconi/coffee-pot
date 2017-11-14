@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
@@ -11,7 +10,6 @@ import {
 } from 'react-router-dom';
 import {Provider} from "mobx-react"
 import UserStore from "./Stores/UserStore";
-var axios = require('axios');
 
 class App extends Component {
   constructor(){

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import ReactPasswordStrength from 'react-password-strength'; 
+import ReactPasswordStrength from 'react-password-strength';
 import { Grid, Cell, TextField, Button } from 'react-md';
-import './SignUp.css'; 
-import { inject, observer } from 'mobx-react';   
-var axios = require('axios');
+import './SignUp.css';
+import { inject, observer } from 'mobx-react';
 
 var SignUp = observer(class SignUp extends Component {
   constructor() {
@@ -45,9 +44,9 @@ var SignUp = observer(class SignUp extends Component {
       })
     }
   }
-// change these to one function
+  // change these to one function
   inputfirstNameChange(e) {
-    this.setState({ firstName: e }); 
+    this.setState({ firstName: e });
   }
   inputlastNameChange(e) {
     this.setState({ lastName: e });
@@ -73,85 +72,85 @@ var SignUp = observer(class SignUp extends Component {
     return (
       <div>
         <Grid className="grid-example">
-      <Cell size={12} tabletSize={12}>  
-      
-      <TextField
-            id="firstName"
-            label="First Name"
-            lineDirection="center"
-            placeholder="Jane" 
-            onChange={this.inputfirstNameChange} 
-            value={this.state.firstName} 
-            name="firstName"   
-          /></Cell>
-      <Cell size={12} tabletSize={12}>
-      
-      <TextField
+          <Cell size={12} tabletSize={12}>
+
+            <TextField
+              id="firstName"
+              label="First Name"
+              lineDirection="center"
+              placeholder="Jane"
+              onChange={this.inputfirstNameChange}
+              value={this.state.firstName}
+              name="firstName"
+            /></Cell>
+          <Cell size={12} tabletSize={12}>
+
+            <TextField
               id="lastName"
               label="Last Name"
               lineDirection="center"
               placeholder="Smith"
-              
-              onChange={this.inputlastNameChange} 
-              value={this.state.lastName} 
-              name="lastName"   
+
+              onChange={this.inputlastNameChange}
+              value={this.state.lastName}
+              name="lastName"
             />
 
-      </Cell>
-    
-      <Cell size={12} tabletSize={12}>
-      
-      <TextField
+          </Cell>
+
+          <Cell size={12} tabletSize={12}>
+
+            <TextField
               id="email"
               label="Email"
               lineDirection="center"
-              placeholder="you@something.com" 
-              onChange={this.inputemailChange} 
-              value={this.state.email} 
-              name="email"   
+              placeholder="you@something.com"
+              onChange={this.inputemailChange}
+              value={this.state.email}
+              name="email"
             />
-            
-            </Cell>
-      <Cell size={12} tabletSize={12}>
-       
 
-      <div className="md-text-field-container md-full-width md-text-field-container--input"><label for="password" className="md-floating-label md-floating-label--inactive md-floating-label--inactive-sized md-text--secondary">Password</label>
-      <ReactPasswordStrength
+          </Cell>
+          <Cell size={12} tabletSize={12}>
+
+
+            <div className="md-text-field-container md-full-width md-text-field-container--input"><label for="password" className="md-floating-label md-floating-label--inactive md-floating-label--inactive-sized md-text--secondary">Password</label>
+              <ReactPasswordStrength
                 value={this.state.password}
                 changeCallback={this.changeCallback}
-              
-              lineDirection="center"
-                
+
+                lineDirection="center"
+
                 type="Password"
                 inputProps={{ className: "md-text-field md-text-field--floating-margin md-full-width md-text", placeholder: "abc123", autoComplete: "off" }}
-              /> 
-        <hr className="no-margin-top md-divider md-divider--text-field md-divider--expand-from-center"/></div>
-   
+              />
+              <hr className="no-margin-top md-divider md-divider--text-field md-divider--expand-from-center" /></div>
 
-      </Cell>
-      <Cell size={12} phoneSize={12}>
-      <TextField
+
+          </Cell>
+          <Cell size={12} phoneSize={12}>
+            <TextField
               id="password"
               label="Confirm Password"
               lineDirection="center"
-              placeholder="abc123" 
-              onChange={this.confirmPassword} 
-              value={this.state.confirmPassword} 
-              name="password" 
-              type="password"  
-              onKeyPress={this._handleKeyPress} 
+              placeholder="abc123"
+              onChange={this.confirmPassword}
+              value={this.state.confirmPassword}
+              name="password"
+              type="password"
+              onKeyPress={this._handleKeyPress}
             /></Cell>
-          
-    </Grid>
-    <Grid>
-      <Cell size={12} phoneSize={12}>
-      <p>{this.state.message}</p>
-      <Button raised primary onClick={this.handleSignup}>Submit</Button>
-      </Cell>
-    </Grid>
+
+        </Grid>
+        <Grid>
+          <Cell size={12} phoneSize={12}>
+            <p>{this.state.message}</p>
+            <Button raised primary onClick={this.handleSignup}>Submit</Button>
+          </Cell>
+        </Grid>
       </div>
     );
- 
+
   };
 });
 

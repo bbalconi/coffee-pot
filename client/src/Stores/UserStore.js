@@ -1,5 +1,4 @@
 import { extendObservable } from 'mobx';
-import { userInfo } from 'os';
 var axios = require('axios');
 
 export default class UserStore {
@@ -20,9 +19,7 @@ export default class UserStore {
         email: signupObj.email,
         password: signupObj.password,
       }).then((res) => {
-        console.log(res.data[0]);        
         this.user = res.data[0];
-        console.log(this.user)
         resolve();
         });
         }

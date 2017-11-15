@@ -50,7 +50,6 @@ function(email, password, done){
       return done(err, null); // null for no user
     } else {
       if (user.rows[0] && passwordHash.verify(password, user.rows[0].password)){
-        console.log(user.rows[0]);
         return done(null, user.rows[0]);
       } else {
         // additional test and error handling here
@@ -77,25 +76,24 @@ passport.deserializeUser((id, done) => {
 
   ioServer.on('connection', (client) => {
     console.log('client connected')
-    client.on('connect', (coffee) => {
-      console.log('is it working? ' + coffee)
+    client.on('coffeeConnect', (coffee) => {
       client.join(coffee);
     });
 
     client.on('/postcup', (data) => {
-      console.log(data)
-      let query = `SELECT * FROM history where userid = 33`
+      let query = `SELECT * FROM history where userid = ${data.userid}`
       pool.query(query, (err, rows) => {
-        if (rows.rows.length > 0) {
-          let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = 33`
+        if (rows.rows[0] != undefined) {
+          let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
           pool.query(updateQuery, (err,rows) => {
             if (err) throw err;
+            ioServer.in(rows).emit('postedCup', rows.rows[0].cupcount)
         })
       } else {
-          let newQuery = `INSERT INTO history (cupcount, status, userid) values ('${data.cupcount}', 0, 33)`;
+          let newQuery = `INSERT INTO history (cupcount, status, userid) values (1, 0, ${data.userid})`;
           pool.query(newQuery, (err,rows) => {
-              console.log(rows);
               if (err) throw err;
+              ioServer.in(rows).emit('postedCup', rows.rows[0].cupcount)
             })
         }
         if (err) throw err;
@@ -115,14 +113,16 @@ passport.deserializeUser((id, done) => {
           next(err);
           res.json({ found: true, success: false, message: err })
         } else {
-          let query = `SELECT cupcount FROM history WHERE userid = 33 and status = 0`;
+          let query = `SELECT sum(cupcount) FROM history where status = 0`;
           let cupcount = 0;
           pool.query(query, (error, rows) => {
-            cupcount = rows.rows[0].cupcount;
+            cupcount = parseInt(rows.rows[0].sum);
             if (error) throw error;
+            if (rows.rows[0].sum == null) {
+              cupcount = 0;
+            }
             res.json({ found: true, success: true, id: user.id, cupcount: cupcount, email: user.email, firstName: user.firstname, lastName: user.lastname })
-          })
-          
+            })
         }
       })
     } else {
@@ -137,7 +137,7 @@ app.post('/socketUrl', (req, res)=>{
   if (process.env.PORT){
     res.json('https://coffee-pot-pi.herokuapp.com:' + process.env.PORT);
   } else {
-    res.json('http://localhost:5000')
+    res.json('http://192.168.1.7:5000')
   }
 });
 
@@ -145,29 +145,38 @@ app.post('/signup', (req, res, next) => {
  let query = `INSERT INTO users (firstname, lastname, email, password) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}') RETURNING id, firstname, lastname, email`  
   pool.query(query, (err, user) => {
   if (err) throw err;
-    console.log(user.rows)
     res.json(user.rows);
   });    
 });
 
-app.post('/postcup', (req, res, next) => {
-  let query = `SELECT * FROM history where userid = 33`
-  pool.query(query, (err, rows) => {
-    if (rows.rows.length > 0) {
-      let updateQuery = `UPDATE history SET cupcount = ${req.body.cupcount} where userid = ${req.body.userid}`
-      pool.query(updateQuery, (err,rows) => {
-        if (err) throw err;
-    })
-  } else {
-      let newQuery = `INSERT INTO history (cupcount, status, userid) values ('${req.body.cupcount}', 0, '${req.body.userid}')`;
-      pool.query(newQuery, (err,rows) => {
-          console.log(rows);
-          if (err) throw err;
-        })
-    }
-    if (err) throw err;
-    });
-});
+// app.post('/getCount', (req, res, next) => {
+//   let query = `SELECT sum(cupcount) FROM history where status = 0;`
+//   pool.query(query, (err, rows) => {
+//     if (err) throw err;
+//     console.log(rows.rows);
+//     res.json(rows.rows);
+//   })
+// })
+
+// app.post('/postcup', (req, res, next) => {
+//   let query = `SELECT * FROM history where userid = 33`
+//   pool.query(query, (err, rows) => {
+//     if (rows.rows.length > 0) {
+//       let updateQuery = `UPDATE history SET cupcount = ${req.body.cupcount} where userid = ${req.body.userid}`
+//       pool.query(updateQuery, (err,rows) => {
+//         if (err) throw err;
+//     })
+//   } else {
+//       let newQuery = `INSERT INTO history (cupcount, status, userid) values ('${req.body.cupcount}', 0, '${req.body.userid}')`;
+//       pool.query(newQuery, (err,rows) => {
+//           console.log(rows);
+//           if (err) throw err;
+//         })
+//     }
+//     if (err) throw err;
+//     });
+// });
+
 
 
 app.get('/logout', function(req, res){
@@ -179,10 +188,11 @@ app.get('/logout', function(req, res){
   } else {
     res.json('no user logged in')
   }
+
 });
 
-app.get("/", function(req, res, next) {
-  res.send("connected!");
+app.get("/*", function(req, res) {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
 var port = process.env.PORT || 5000;

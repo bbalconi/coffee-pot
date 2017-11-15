@@ -46,7 +46,7 @@ export default class UserStore {
 
     });
   };
-
+ 
   logout() {
     axios.get('/logout').then((res)=> {
       console.log(res);
@@ -59,5 +59,12 @@ export default class UserStore {
     }, function(err){
       console.log(err);
     });
-  }
+  } 
+      // getCount(){
+      //   axios.post('/getCount').then((res) => {
+      //     console.log(res)
+      //     this.user = res.data
+      //     })
+      //   }
+ 
 }

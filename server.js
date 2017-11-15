@@ -34,11 +34,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSession({ secret: "moby" }));
 app.use(passport.initialize());
 app.use(passport.session());
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('./client/build'));
-} else {
-  app.use(express.static('public'));
-}
+app.use(express.static('./client/build'));
 
 // needs to be called username 
 passport.use(new LocalStrategy({email: 'username', password: 'password'},

@@ -23,13 +23,8 @@ const pool = new Pool({
 });
 
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('./client/build'));
-} else {
-  app.use(express.static('public'));
-}
  
-var allowedOrigins = "http://localhost:* http://127.0.0.1:* http://coffee-pot-pi.herokuapp.com:*";
+var allowedOrigins = "http://localhost:* http://192.168.*.*:* http://coffee-pot-pi.herokuapp.com:*";
 var ioServer = io(server, {
   origins: allowedOrigins
 });
@@ -39,7 +34,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSession({ secret: "moby" }));
 app.use(passport.initialize());
 app.use(passport.session());
-
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('./client/build'));
+} else {
+  app.use(express.static('public'));
+}
 
 // needs to be called username 
 passport.use(new LocalStrategy({email: 'username', password: 'password'},
@@ -77,14 +76,13 @@ passport.deserializeUser((id, done) => {
   })
 
   ioServer.on('connection', (client) => {
-    console.log('connected')
+    console.log('client connected')
     client.on('connect', (coffee) => {
       console.log('is it working? ' + coffee)
       client.join(coffee);
     });
 
     client.on('/postcup', (data) => {
-      
       console.log(data)
       let query = `SELECT * FROM history where userid = 33`
       pool.query(query, (err, rows) => {

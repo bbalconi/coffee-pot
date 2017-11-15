@@ -33,12 +33,9 @@ var Navbar = observer(class Navbar extends Component {
   constructor(props) {
     super(props);
   }
-  render() {
-    console.log(this.props);
-    
+  render() {  
     const { classes } = this.props;
     let entryLinks = [];
-    console.log(this.props.userStore.user);
     if (this.props.userStore.user) {
       let first = (this.props.userStore.user) ? this.props.userStore.user.firstName : ''; // ternary operator
         entryLinks.push(<Link className="item" key='linkLogout' to="/logout"><Button color="contrast">Logout</Button></Link>);

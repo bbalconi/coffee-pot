@@ -36,6 +36,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static('./client/build'));
 
+
 // needs to be called username 
 passport.use(new LocalStrategy({email: 'username', password: 'password'},
 function(email, password, done){
@@ -173,18 +174,10 @@ app.post('/signup', (req, res, next) => {
 //     });
 // });
 
-
-
-app.get('/logout', function(req, res){
-  if (req.user) {
-    req.logout();
-    res.json('user logged out')
-    req.session.destroy();
-    
-  } else {
-    res.json('no user logged in')
-  }
-
+app.post('/logout', (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.redirect('/');
 });
 
 app.get("/*", function(req, res) {

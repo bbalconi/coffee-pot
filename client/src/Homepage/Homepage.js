@@ -9,7 +9,6 @@ var axios = require('axios')
 var Homepage = observer(class Homepage extends Component {
   constructor(){
     super()
-    this.clientLogOut = this.clientLogOut.bind(this)
     this.socketTest = this.socketTest.bind(this)
     this.updateCount = this.updateCount.bind(this)
     this.socket;
@@ -18,12 +17,6 @@ var Homepage = observer(class Homepage extends Component {
     }
   }
 
-  clientLogOut() {
-    this.props.userStore.logOut()
-      .then(() => {
-        this.props.history.push("/login");
-      })
-  }
 
   socketTest() {
     this.updateCount()
@@ -57,9 +50,6 @@ var Homepage = observer(class Homepage extends Component {
     return (
       <div>
         Hello, {this.props.userStore.user.firstName} !
-        <Button onClick={this.clientLogOut}>
-          LogOut
-        </Button>
         <Button onClick={this.socketTest}>
         {this.props.userStore.user.cupcount}
         </Button>

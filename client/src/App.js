@@ -4,6 +4,7 @@ import Login from './Login/Login';
 import SignUp from './SignUp/SignUp';
 import Homepage from './Homepage/Homepage';
 import Navbar from './Navbar/Navbar';
+import Logout from './Login/Logout';
 import {
   BrowserRouter as Router,
   Route,
@@ -24,10 +25,12 @@ class App extends Component {
        <Provider userStore={new UserStore()}> 
         <Router>
           <div>
+            
             <Navbar />
             <Route exact path='/' render={() => <Homepage /> }/>
             <Route  path='/signup' render={() => <SignUp /> }/>
             <Route path='/login' render={() => <Login /> }/>
+            <Route path='/logout' render={() => <Logout /> }/>
           </div>
         </Router>
       </Provider>

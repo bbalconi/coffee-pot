@@ -177,10 +177,18 @@ app.post('/signup', (req, res, next) => {
 //     });
 // });
 
-app.post('/logout', (req, res) => {
-  req.logout();
-  req.session.destroy();
-  res.redirect('/');
+
+
+app.get('/logout', function(req, res){
+  if (req.user) {
+    req.logout();
+    res.json('user logged out')
+    req.session.destroy();
+    
+  } else {
+    res.json('no user logged in')
+  }
+
 });
 
 app.get("/*", function(req, res) {

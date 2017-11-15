@@ -40,10 +40,9 @@ export default class UserStore {
         } else {
           reject(res.data)
         }
-      }).catch((e) => {
-        reject(e);
+      }).catch((error) => {
+        reject(error);
       })
-
     });
   };
  

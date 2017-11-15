@@ -86,12 +86,8 @@ passport.deserializeUser((id, done) => {
         if (rows.rows[0] != undefined) {
           let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
           pool.query(updateQuery, (err,rows) => {
-            console.log(updateQuery)
-            console.log(rows.rows[0].cupcount)
-            console.log('line90')
             if (err) throw err;
             ioServer.in(rows).emit('postedCup', rows.rows[0].cupcount)
-            console.log('here!!!!!')            
         })
       } else {
           let newQuery = `INSERT INTO history (cupcount, status, userid) values (1, 0, ${data.userid})`;
@@ -187,8 +183,8 @@ app.post('/logout', (req, res) => {
   res.redirect('/');
 });
 
-app.get("/", function(req, res, next) {
-  res.send("connected!");
+app.get("/*", function(req, res) {
+  res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
 var port = process.env.PORT || 5000;

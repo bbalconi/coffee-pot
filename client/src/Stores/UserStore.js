@@ -56,4 +56,11 @@ export default class UserStore {
         )
       }   
 
+      // getCount(){
+      //   axios.post('/getCount').then((res) => {
+      //     console.log(res)
+      //     this.user = res.data
+      //     })
+      //   }
+
 }

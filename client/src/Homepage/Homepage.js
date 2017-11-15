@@ -30,8 +30,7 @@ var Homepage = observer(class Homepage extends Component {
   }
 
   updateCount(){
-    console.log(this)
-    console.log(this.socket)
+    console.log(typeof this.props.userStore.user.cupcount)
     this.props.userStore.user.cupcount = this.props.userStore.user.cupcount + 1;
     this.socket.emit('/postcup', {
       cupcount: this.props.userStore.user.cupcount,
@@ -41,11 +40,16 @@ var Homepage = observer(class Homepage extends Component {
   
   componentDidMount(){
     axios.post('/socketUrl').then((res) => {
-      console.log(res)
       var socketUrl = res.data;
       this.socket = openSocket(socketUrl)
-      console.log(this.socket);
+      this.socket.emit('coffeeConnect', res)
+      console.log(res)
+      this.socket.on('postedCup', (data) => {
+        console.log(data)
+        this.props.userStore.user.cupcount = data.rows[0].cupcount;
+      })
     })
+    // this.props.userStore.getCount();
   }
 
   render() {

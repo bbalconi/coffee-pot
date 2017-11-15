@@ -1,5 +1,4 @@
 import { extendObservable } from 'mobx';
-import openSocket from 'socket.io-client';
 var axios = require('axios');
 
 export default class UserStore {
@@ -9,11 +8,6 @@ export default class UserStore {
       get retrieveUser() {
         return this.user
       }
-    })
-    axios.post('/socketUrl').then((res) => {
-      console.log(res)
-      var socketUrl = res.data;
-      this.socket = openSocket(socketUrl)
     })
   };
 
@@ -61,16 +55,5 @@ export default class UserStore {
         }
         )
       }   
-
-
-  updateCount(){
-    console.log(this)
-    console.log(this.socket)
-    this.user.cupcount = this.user.cupcount + 1;
-    this.socket.emit('/postcup', {
-      cupcount: this.user.cupcount,
-      userid: this.user.id
-    })
-    }
 
 }

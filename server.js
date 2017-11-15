@@ -84,6 +84,7 @@ passport.deserializeUser((id, done) => {
     });
 
     client.on('/postcup', (data) => {
+      
       console.log(data)
       let query = `SELECT * FROM history where userid = 33`
       pool.query(query, (err, rows) => {
@@ -138,7 +139,7 @@ app.post('/socketUrl', (req, res)=>{
   if (process.env.PORT){
     res.json('https://coffee-pot-pi.herokuapp.com:' + process.env.PORT);
   } else {
-    res.json('localhost:5000')
+    res.json('http://localhost:5000')
   }
 });
 

@@ -34,12 +34,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(expressSession({ secret: "moby" }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static('./client/build'));
-
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('./client/build'));
+} else {
+  app.use(express.static('public'));
+}
 
 // needs to be called username 
 passport.use(new LocalStrategy({email: 'username', password: 'password'},
 function(email, password, done){
+  console.log(process.env.NODE_ENV)
+  console.log('process env')
   // hit the db and do some matching
   let query = 'SELECT * from users where email = \'' + email + '\'';
   pool.query(query, function(err, user, fields) {
@@ -134,7 +139,7 @@ app.post('/socketUrl', (req, res)=>{
   if (process.env.PORT){
     res.json('https://coffee-pot-pi.herokuapp.com:' + process.env.PORT);
   } else {
-    res.json('http://192.168.1.7:5000')
+    res.json('http://192.168.1.17:5000')
   }
 });
 

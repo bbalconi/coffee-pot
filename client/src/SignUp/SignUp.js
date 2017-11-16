@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import ReactPasswordStrength from 'react-password-strength';
-import { Grid, Cell, TextField, Button } from 'react-md';
+import { Grid, TextField, Button } from 'material-ui';
 import './SignUp.css';
 import { inject, observer } from 'mobx-react';
 
@@ -72,7 +72,7 @@ var SignUp = observer(class SignUp extends Component {
     return (
       <div>
         <Grid className="grid-example">
-          <Cell size={12} tabletSize={12}>
+          <Grid item>
 
             <TextField
               id="firstName"
@@ -82,8 +82,8 @@ var SignUp = observer(class SignUp extends Component {
               onChange={this.inputfirstNameChange}
               value={this.state.firstName}
               name="firstName"
-            /></Cell>
-          <Cell size={12} tabletSize={12}>
+            /></Grid>
+          <Grid item>
 
             <TextField
               id="lastName"
@@ -96,9 +96,9 @@ var SignUp = observer(class SignUp extends Component {
               name="lastName"
             />
 
-          </Cell>
+          </Grid>
 
-          <Cell size={12} tabletSize={12}>
+          <Grid item>
 
             <TextField
               id="email"
@@ -110,8 +110,8 @@ var SignUp = observer(class SignUp extends Component {
               name="email"
             />
 
-          </Cell>
-          <Cell size={12} tabletSize={12}>
+          </Grid>
+          <Grid item>
 
 
             <div className="md-text-field-container md-full-width md-text-field-container--input"><label for="password" className="md-floating-label md-floating-label--inactive md-floating-label--inactive-sized md-text--secondary">Password</label>
@@ -127,8 +127,8 @@ var SignUp = observer(class SignUp extends Component {
               <hr className="no-margin-top md-divider md-divider--text-field md-divider--expand-from-center" /></div>
 
 
-          </Cell>
-          <Cell size={12} phoneSize={12}>
+          </Grid>
+          <Grid item>          
             <TextField
               id="password"
               label="Confirm Password"
@@ -139,14 +139,14 @@ var SignUp = observer(class SignUp extends Component {
               name="password"
               type="password"
               onKeyPress={this._handleKeyPress}
-            /></Cell>
+            /></Grid>
 
         </Grid>
         <Grid>
-          <Cell size={12} phoneSize={12}>
+          <Grid item>
             <p>{this.state.message}</p>
             <Button raised primary onClick={this.handleSignup}>Submit</Button>
-          </Cell>
+          </Grid>
         </Grid>
       </div>
     );

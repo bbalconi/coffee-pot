@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Grid, Cell, TextField, Button } from 'react-md';
+import { Grid, TextField, Button } from 'material-ui';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
@@ -18,10 +18,11 @@ var Login = observer(class Login extends Component {
     }
   }
   inputemailChange(event) {
-    this.setState({ email: event });
+    console.log(event);
+    this.setState({ email: event.target.value });
   }
   inputpasswordChange(event) {
-    this.setState({ password: event });
+    this.setState({ password: event.target.value });
   }
 
   handleLogin(a, b) {
@@ -52,7 +53,7 @@ var Login = observer(class Login extends Component {
     return (
       <div>
         <Grid className="grid-example">
-          <Cell size={12} tabletSize={12}>
+        <Grid item>
             <TextField
               id="email"
               label="Email"
@@ -62,8 +63,8 @@ var Login = observer(class Login extends Component {
               value={this.state.email}
               name="email"
             />
-          </Cell>
-          <Cell size={12} phoneSize={12}>
+          </Grid>
+          <Grid item>
             <TextField
               id="password"
               label="Confirm Password"
@@ -74,13 +75,13 @@ var Login = observer(class Login extends Component {
               name="password"
               type="password"
               onKeyPress={this._handleKeyPress}
-            /></Cell>
+            /></Grid>
         </Grid>
         <Grid>
-          <Cell size={12} phoneSize={12}>
+          <Grid item>
             <p>{this.state.message}</p>
             <Button raised primary className="login-button" onClick={() => this.handleLogin(this.state.email, this.state.password)} >Submit</Button>
-          </Cell>
+          </Grid>
         </Grid>
       </div>
     );

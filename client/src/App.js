@@ -11,6 +11,19 @@ import {
 } from 'react-router-dom';
 import {Provider} from "mobx-react"
 import UserStore from "./Stores/UserStore";
+import primary from 'material-ui/colors/brown';
+import secondary from 'material-ui/colors/blueGrey';
+import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+ 
+const theme = createMuiTheme({
+  palette: {
+    primary: primary,
+    secondary: secondary,
+  },
+  status: {
+    danger: 'orange',
+  },
+});
 
 class App extends Component {
   constructor(){
@@ -25,12 +38,15 @@ class App extends Component {
        <Provider userStore={new UserStore()}> 
         <Router>
           <div>
-            
+            <MuiThemeProvider theme={theme}>
             <Navbar />
             <Route exact path='/' render={() => <Homepage /> }/>
-            <Route  path='/signup' render={() => <SignUp /> }/>
-            <Route path='/login' render={() => <Login /> }/>
-            <Route path='/logout' render={() => <Logout /> }/>
+              <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
+              <Route  path='/signup' render={() => <SignUp /> }/>
+              <Route path='/login' render={() => <Login /> }/>
+              <Route path='/logout' render={() => <Logout /> }/>
+              </div>
+            </MuiThemeProvider>
           </div>
         </Router>
       </Provider>

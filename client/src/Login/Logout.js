@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-const axios = require('axios');
 
 var Logout = observer(class Logout extends Component {
-  constructor() {
-    super();
-  }
+
   componentDidMount() {
     console.log('log out')
       this.props.userStore.logout()

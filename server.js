@@ -137,7 +137,7 @@ passport.deserializeUser((id, done) => {
 
 app.post('/socketUrl', (req, res)=>{
   if (process.env.PORT){
-    res.json('https://coffee-pot-pi.herokuapp.com:' + process.env.PORT);
+    res.json('https://coffee-pot-pi.herokuapp.com:');
   } else {
     res.json('http://192.168.1.17:5000')
   }

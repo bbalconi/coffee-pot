@@ -43,8 +43,6 @@ if (process.env.NODE_ENV === 'production') {
 // needs to be called username 
 passport.use(new LocalStrategy({email: 'username', password: 'password'},
 function(email, password, done){
-  console.log(process.env.NODE_ENV)
-  console.log('process env')
   // hit the db and do some matching
   let query = 'SELECT * from users where email = \'' + email + '\'';
   pool.query(query, function(err, user, fields) {
@@ -85,15 +83,17 @@ passport.deserializeUser((id, done) => {
     client.on('/postcup', (data) => {
       let query = `SELECT * FROM history where userid = ${data.userid}`
       pool.query(query, (err, rows) => {
-        if (rows.rows[0] != undefined) {
+        if (rows.rowCount > 0) {
           let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
           pool.query(updateQuery, (err,rows) => {
             if (err) throw err;
             ioServer.in(rows).emit('postedCup', rows.rows[0].cupcount)
         })
       } else {
-          let newQuery = `INSERT INTO history (cupcount, status, userid) values (1, 0, ${data.userid})`;
+          let newQuery = `INSERT INTO history (cupcount, status, userid) values (1, 0, ${data.userid}) RETURNING cupcount`;
           pool.query(newQuery, (err,rows) => {
+            console.log(rows)
+            console.log('plzzzz')
               if (err) throw err;
               ioServer.in(rows).emit('postedCup', rows.rows[0].cupcount)
             })
@@ -111,20 +111,25 @@ passport.deserializeUser((id, done) => {
     } else if (user) {
       req.logIn(user, (err) => {
         if (err) {
-          console.log(err);
           next(err);
           res.json({ found: true, success: false, message: err })
         } else {
-          let query = `SELECT sum(cupcount) FROM history where status = 0`;
-          let cupcount = 0;
-          pool.query(query, (error, rows) => {
-            cupcount = parseInt(rows.rows[0].sum);
-            if (error) throw error;
-            if (rows.rows[0].sum == null) {
-              cupcount = 0;
-            }
-            res.json({ found: true, success: true, id: user.id, cupcount: cupcount, email: user.email, firstName: user.firstname, lastName: user.lastname })
-            })
+          let sum = 0
+          let sumQuery = `select sum(cupcount) from history where status = 0;`
+          pool.query(sumQuery, (err, rows) => {
+            console.log(rows)
+            sum = rows.rows[0].sum
+            let query = `SELECT * FROM history where userid = ${user.id}`;
+            pool.query(query, (error, rows) => {
+              if (error) throw error;
+              if (rows.rowCount > 0) {
+                userCupcount = parseInt(rows.rows[0].cupcount);
+              } else {
+                userCupcount = 0
+              }
+              res.json({ found: true, success: true, id: user.id, totalCount: sum, userCupcount: userCupcount, email: user.email, firstName: user.firstname, lastName: user.lastname })
+              })
+          })
         }
       })
     } else {

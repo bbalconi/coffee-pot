@@ -36,6 +36,7 @@ export default class UserStore {
         if (err) throw err;
         if (res.data.success) {
           this.user = res.data
+          console.log(this.user)
           resolve(res.data);
         } else {
           reject(res.data)

@@ -11,7 +11,7 @@ var axios = require('axios')
 var Homepage = observer(class Homepage extends Component {
   constructor(){
     super()
-    this.socketTest = this.socketTest.bind(this)
+    this.addCup = this.addCup.bind(this)
     this.updateCount = this.updateCount.bind(this)
     this.socket;
     this.state = {
@@ -20,14 +20,14 @@ var Homepage = observer(class Homepage extends Component {
   }
 
 
-  socketTest() {
+  addCup() {
     this.updateCount()
   }
 
   updateCount(){
-    this.props.userStore.user.cupcount = this.props.userStore.user.cupcount + 1;
+    this.props.userStore.user.userCupcount = this.props.userStore.user.userCupcount + 1;
     this.socket.emit('/postcup', {
-      cupcount: this.props.userStore.user.cupcount,
+      cupcount: this.props.userStore.user.userCupcount,
       userid: this.props.userStore.user.id
     })
     }
@@ -48,8 +48,8 @@ var Homepage = observer(class Homepage extends Component {
     return (
       <div>
         Hello, {this.props.userStore.user.firstName} !
-        <Button onClick={this.socketTest}>
-        {this.props.userStore.user.cupcount}
+        <Button onClick={this.addCup}>This user wants:
+        {this.props.userStore.user.userCupcount} cups of coffee!
         </Button>
 
         <hr/>

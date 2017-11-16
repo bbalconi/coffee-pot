@@ -5,6 +5,7 @@ import { Button } from 'reactstrap'
 import openSocket from 'socket.io-client';
 import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
+import Total from '../Total/Total';
 var axios = require('axios')
 
 
@@ -25,6 +26,7 @@ var Homepage = observer(class Homepage extends Component {
   }
 
   updateCount(){
+    console.log('triggered')
     this.props.userStore.user.userCupcount = this.props.userStore.user.userCupcount + 1;
     this.socket.emit('/postcup', {
       cupcount: this.props.userStore.user.userCupcount,
@@ -38,6 +40,7 @@ var Homepage = observer(class Homepage extends Component {
       this.socket = openSocket(socketUrl)
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
+        console.log(data)
         this.props.userStore.user.userCupcount = data.userCount;
         this.props.userStore.user.totalCount = data.totalCount
       })
@@ -53,7 +56,7 @@ var Homepage = observer(class Homepage extends Component {
         <Button onClick={this.addCup}>This user wants:
         {this.props.userStore.user.userCupcount} cups of coffee!
         </Button>
-        <p>All users want: {this.props.userStore.user.totalCount}</p>
+        <Total />
         <hr/>
         People who want coffee:
         <Users/>

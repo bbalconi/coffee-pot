@@ -52,7 +52,7 @@ var Homepage = observer(class Homepage extends Component {
       </div>
     )} else {
       return(
-        <div>Not logged in</div>
+        <div>PLEASE WORK HEROKU</div>
       )
     }
   }

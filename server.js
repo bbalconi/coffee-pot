@@ -24,7 +24,7 @@ const pool = new Pool({
 
 
  
-var allowedOrigins = "http://localhost:* http://192.168.*.*:* http://coffee-pot-pi.herokuapp.com:*";
+var allowedOrigins = "http://localhost:* http://192.168.*.*:* http://coffee-pot-pi.herokuapp.com:* https://coffee-pot-pi.herokuapp.com:*";
 var ioServer = io(server, {
   origins: allowedOrigins
 });

@@ -11,7 +11,7 @@ var passwordHash = require("password-hash");
 var cookieParser = require('cookie-parser');
 var http = require('http');
 var path  = require('path');
-const { Pool } = require('pg');
+const { Pool } = require('pg').native;
 require('dotenv').config();
 
 const pool = new Pool({
@@ -24,7 +24,7 @@ const pool = new Pool({
 
 
  
-var allowedOrigins = "http://localhost:* http://192.168.*.*:* http://coffee-pot-pi.herokuapp.com:* https://coffee-pot-pi.herokuapp.com:*";
+var allowedOrigins = "http://localhost:* http://192.168.*.*:* https://coffee-pot-pi.herokuapp.com:* https://coffee-pot-pi.herokuapp.com:*";
 var ioServer = io(server, {
   origins: allowedOrigins
 });

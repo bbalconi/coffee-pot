@@ -9,8 +9,7 @@ import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import {Link} from 'react-router-dom';
 import Icon from 'material-ui/Icon';
-import { inject, observer } from 'mobx-react';
-import './Navbar.css';
+import { inject, observer } from 'mobx-react'; 
  
 // function Navbar(props) {
 // var Navbar = observer(class Navbar extends Component {
@@ -45,7 +44,7 @@ var Navbar = observer(class Navbar extends Component {
       }
 
       return (
-        <div className={classes.root}>
+        <div className={classes.root} style={{marginTop: '0'}}>
           <AppBar position="static">
             <Toolbar>
               
@@ -68,4 +67,4 @@ Navbar.propTypes = {
 };
 
 export default inject('userStore')(withStyles(styles)(Navbar));
-//https://material-ui-next.com/demos/app-sbar/
+// https://material-ui-next.com/demos/app-bar/

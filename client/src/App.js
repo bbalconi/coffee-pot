@@ -14,6 +14,7 @@ import UserStore from "./Stores/UserStore";
 import primary from 'material-ui/colors/brown';
 import secondary from 'material-ui/colors/blueGrey';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
+import Loading from './Coffee/Loading';
  
 const theme = createMuiTheme({
   palette: {
@@ -45,6 +46,7 @@ class App extends Component {
               <Route  path='/signup' render={() => <SignUp /> }/>
               <Route path='/login' render={() => <Login /> }/>
               <Route path='/logout' render={() => <Logout /> }/>
+              <Route path='/loading' render={() => <Loading /> }/>
               </div>
             </MuiThemeProvider>
           </div>

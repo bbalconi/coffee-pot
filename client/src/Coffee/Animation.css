@@ -1,0 +1,53 @@
+/* http://soqr.fr/testsvg/embed-svg-liquid-layout-responsive-web-design.php */
+ 
+.sm { position: absolute; top:0; z-index: 1; width:100%; display:block;} 
+.bg-underlay { z-index:-1; position:absolute;top:0; position:relative;}
+.bg-underlay .svg-container .coffeecup { fill: #795548;}
+svg { height:auto; }
+.svg-icon { width:100%;margin:0 auto; }
+.svg-icon { position:relative;bottom:0; height:50%; overflow:hidden;}
+.svg-container {
+    padding:0; 
+    display: inline-block;
+    position: relative;
+    width: 100%;   
+    /* depends on svg ratio, for my zebra height/width = 1.2 so padding-bottom = 50% * 1.2 = 60% */
+    vertical-align: middle;
+    text-align:center; 
+    height: 0; 
+    padding-bottom: 100%;
+    /* top | middle | bottom ... do what you want */
+}
+.svg-container svg {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+.svg-container path, .svg-container polygon {
+    display: table-cell
+}
+.svg-container .coffeecup { fill: #000;
+ -o-transition:.5s;
+    -ms-transition:.5s;
+    -moz-transition:.5s;
+    -webkit-transition:.5s; 
+    /* ...and now for the proper property */
+    transition:.5s;
+   transition: fill 1s ease;
+   
+}
+  
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    img[src*=".svg"] {
+        width: 100%;
+    }
+}
+@supports (-ms-accelerator:true) {
+    img[src*=".svg"] {
+        width: 100%
+    }
+}
+
+.sm {  vertical-align:bottom}

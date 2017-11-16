@@ -12,7 +12,88 @@ var cookieParser = require('cookie-parser');
 var http = require('http');
 var path  = require('path');
 const { Pool } = require('pg');
+const aws = require('aws-sdk');
 require('dotenv').config();
+
+aws.config.region = 'us-west-1';
+const S3_BUCKET = process.env.S3_BUCKET;
+var accessKeyId = process.env.AWS_KEY;
+var secretAccessKey = process.env.AWS_ACCESS;
+
+/*
+ * Respond to GET requests to /sign-s3.
+ * Upon request, return JSON containing the temporarily-signed S3 request and
+ * the anticipated URL of the image.
+ */
+app.get('/sign-s3', (req, res) => {
+  
+  var s3 = new aws.S3({
+    accessKeyId: accessKeyId,
+    secretAccessKey: secretAccessKey,
+    region: "us-west-1" 
+  });
+  // s3.config = new aws.Config();
+  
+ 
+var params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: 'mykey.txt',
+    Body: "HelloWorld"
+};
+s3.putObject(params, function (err, res) {
+    if (err) {
+        console.log("Error uploading data: ", err);
+    } else {
+      console.log(res);
+      resolve();
+        console.log("Successfully uploaded data to myBucket/myKey");
+    }
+});
+
+
+
+
+  // const s3 = new aws.S3({
+  //   accessKeyId: accessKeyId,
+  //   secretAccessKey: secretAccessKey
+  // }); 
+
+  // const fileName = req.query['file-name'];
+  // const fileType = req.query['file-type'];
+  // const s3Params = {
+  //   Bucket: S3_BUCKET,
+  //   Key: fileName,
+  //   Expires: 60,
+  //   ContentType: fileType,
+  //   ACL: 'public-read' 
+  // };
+
+  // s3.getSignedUrl('putObject', s3Params, (err, data) => {
+  //   if(err){
+  //     console.log(err);
+  //     return res.end();
+  //   }
+  //   console.log(S3_BUCKET + fileName)
+  //   const returnData = {
+  //     signedRequest: data,
+  //     url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+  //   };
+  //   console.log(returnData);
+  //   res.write(JSON.stringify(returnData));
+  //   res.end();
+  // });
+});
+
+
+
+/*
+ * Respond to POST requests to /submit_form.
+ * This function needs to be completed to handle the information in
+ * a way that suits your application.
+ */
+app.post('/save-details', (req, res) => {
+  // TODO: Read POSTed form data and do something useful
+});
 
 const pool = new Pool({
   user: process.env.ELEPHANT_DB_USER,

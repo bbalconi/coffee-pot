@@ -5,6 +5,7 @@ import { Button } from 'reactstrap'
 import openSocket from 'socket.io-client';
 import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
+import UploadImage from '../Upload/Image';
 var axios = require('axios')
 
 
@@ -74,6 +75,7 @@ var Homepage = observer(class Homepage extends Component {
           </div>
           </div> 
           <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
+          <UploadImage/>
 
             <h2>Revolutionize your coffee process</h2>
             <p>Get your piece of the Coffee Pot "Pi"</p>

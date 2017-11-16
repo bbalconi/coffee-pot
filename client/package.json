@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "axios": "^0.17.1", 
+    "axios": "^0.17.1",
     "material-ui": "^1.0.0-beta.21",
     "material-ui-icons": "^1.0.0-beta.17",
     "material-ui-password-field": "^1.4.0",
@@ -14,8 +14,11 @@
     "react-dom": "^16.1.1",
     "react-password-strength": "^2.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.0.17", 
-    "socket.io-client": "^2.0.4"
+    "react-scripts": "1.0.17",
+    "socket.io-client": "^2.0.4",
+    "aws-sdk": "2.x",
+    "ejs": "2.x",
+    "express": "4.x"
   },
   "scripts": {
     "start": "react-scripts start",

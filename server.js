@@ -11,7 +11,7 @@ var passwordHash = require("password-hash");
 var cookieParser = require('cookie-parser');
 var http = require('http');
 var path  = require('path');
-const { Pool } = require('pg').native;
+const { Pool } = require('pg');
 require('dotenv').config();
 
 const pool = new Pool({

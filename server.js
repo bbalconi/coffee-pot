@@ -81,24 +81,34 @@ passport.deserializeUser((id, done) => {
     });
 
     client.on('/postcup', (data) => {
-      let query = `SELECT * FROM history where userid = ${data.userid}`
-      pool.query(query, (err, rows) => {
-        if (rows.rowCount > 0) {
-          let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
-          pool.query(updateQuery, (err,rows) => {
-            if (err) throw err;
-            ioServer.in(rows).emit('postedCup', rows.rows[0].cupcount)
-        })
-      } else {
-          let newQuery = `INSERT INTO history (cupcount, status, userid) values (1, 0, ${data.userid}) RETURNING cupcount`;
-          pool.query(newQuery, (err,rows) => {
-            console.log(rows)
-            console.log('plzzzz')
+      let sum = {
+        totalCount: 0,
+        userCount: 0
+      }
+      let sumQuery = `select sum(cupcount) from history where status = 0;`
+      pool.query(sumQuery, (err, rows) => {
+        console.log(rows.rows[0].sum)
+        sum.totalCount = parseInt(rows.rows[0].sum);
+        let query = `SELECT * FROM history where userid = ${data.userid}`
+        pool.query(query, (err, rows) => {
+          if (rows.rowCount > 0) {
+            let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
+            pool.query(updateQuery, (err,rows) => {
+              sum.userCount = rows.rows[0].cupcount
               if (err) throw err;
-              ioServer.in(rows).emit('postedCup', rows.rows[0].cupcount)
-            })
-        }
-        if (err) throw err;
+              ioServer.in(rows).emit('postedCup', sum)
+        })
+        } else {
+            let newQuery = `INSERT INTO history (cupcount, status, userid) values (1, 0, ${data.userid}) RETURNING cupcount`;
+            pool.query(newQuery, (err,rows) => {
+              console.log(rows)
+              console.log('plzzzz')
+                if (err) throw err;
+                ioServer.in(rows).emit('postedCup', rows.rows[0].cupcount, sum)
+              })
+          }
+          if (err) throw err;
+          });
         });
     });
     client.on('disconnect', ()=>{console.log("client disconnected")});
@@ -117,7 +127,6 @@ passport.deserializeUser((id, done) => {
           let sum = 0
           let sumQuery = `select sum(cupcount) from history where status = 0;`
           pool.query(sumQuery, (err, rows) => {
-            console.log(rows)
             sum = rows.rows[0].sum
             let query = `SELECT * FROM history where userid = ${user.id}`;
             pool.query(query, (error, rows) => {

@@ -30,7 +30,7 @@ var Homepage = observer(class Homepage extends Component {
       cupcount: this.props.userStore.user.userCupcount,
       userid: this.props.userStore.user.id
     })
-    }
+  }
   
   componentDidMount(){
     axios.post('/socketUrl').then((res) => {
@@ -38,12 +38,14 @@ var Homepage = observer(class Homepage extends Component {
       this.socket = openSocket(socketUrl)
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
-        this.props.userStore.user.cupcount = data;
+        this.props.userStore.user.userCupcount = data.userCount;
+        this.props.userStore.user.totalCount = data.totalCount
       })
     })
   }
 
   render() {
+    console.log(this.props.userStore.user)
     if (this.props.userStore.user) {
     return (
       <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
@@ -51,6 +53,7 @@ var Homepage = observer(class Homepage extends Component {
         <Button onClick={this.addCup}>This user wants:
         {this.props.userStore.user.userCupcount} cups of coffee!
         </Button>
+        <p>All users want: {this.props.userStore.user.totalCount}</p>
         <hr/>
         People who want coffee:
         <Users/>

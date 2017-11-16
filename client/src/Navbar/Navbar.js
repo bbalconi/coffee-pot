@@ -5,8 +5,6 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
 import {Link} from 'react-router-dom';
 import Icon from 'material-ui/Icon';
 import { inject, observer } from 'mobx-react'; 
@@ -29,9 +27,6 @@ import { inject, observer } from 'mobx-react';
 
   
 var Navbar = observer(class Navbar extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {  
     const { classes } = this.props;
     let entryLinks = [];

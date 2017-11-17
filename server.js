@@ -12,7 +12,12 @@ var cookieParser = require('cookie-parser');
 var http = require('http');
 var path  = require('path');
 const { Pool } = require('pg');
+const AWS = require('aws-sdk');
+// var fs = require('fs');
+
 require('dotenv').config();
+
+
 
 const pool = new Pool({
   user: process.env.ELEPHANT_DB_USER,
@@ -165,6 +170,59 @@ app.post('/socketUrl', (req, res)=>{
   } else {
     res.json('http://localhost:5000')
   }
+});
+
+
+
+
+/*
+ * Respond to GET requests to /sign-s3.
+ * Upon request, return JSON containing the temporarily-signed S3 request and
+ * the anticipated URL of the image.
+ */
+
+app.get('/sign-s3', (req, res) => {
+  //const s3 = new aws.S3();
+const S3_BUCKET = process.env.S3_BUCKET;
+
+  var s3 = new AWS.S3({
+    'accessKeyId'     : process.env.ACCESS_KEY_ID,
+    'secretAccessKey' : process.env.SECRET_ACCESS_KEY,
+    'region'          : 'us-west-1'
+  });
+
+  const fileName = req.query['file-name'];
+  const fileType = req.query['file-type'];
+  const s3Params = {
+    Bucket: S3_BUCKET,
+    Key: fileName,
+    Expires: 60,
+    ContentType: fileType,
+    ACL: 'public-read'
+  };
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.log(err);
+      return res.end();
+    }
+    const returnData = {
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+    };
+    res.write(JSON.stringify(returnData));
+    res.end();
+  });
+});
+
+/*
+ * Respond to POST requests to /submit_form.
+ * This function needs to be completed to handle the information in
+ * a way that suits your application.
+ */
+app.post('/save-details', (req, res) => {
+  // TODO: Read POSTed form data and do something useful
+  // actually this can just be implemented inside signup?
 });
 
 app.post('/signup', (req, res, next) => {

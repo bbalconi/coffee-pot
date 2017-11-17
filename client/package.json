@@ -17,6 +17,10 @@
     "react-password-strength": "^2.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
+    "socket.io-client": "^2.0.4",
+    "aws-sdk": "2.x",
+    "ejs": "2.x",
+    "express": "4.x"
     "socket.io-client": "^2.0.4"
   },
   "scripts": {

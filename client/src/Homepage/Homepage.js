@@ -5,7 +5,6 @@ import { Button } from 'reactstrap'
 import openSocket from 'socket.io-client';
 import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
-import Total from '../Total/Total';
 var axios = require('axios')
 
 
@@ -13,25 +12,28 @@ var Homepage = observer(class Homepage extends Component {
   constructor(){
     super()
     this.addCup = this.addCup.bind(this)
-    this.updateCount = this.updateCount.bind(this)
+    this.startBrew = this.startBrew.bind(this)
     this.socket;
     this.state = {
       num: 0
     }
   }
 
-
-  addCup() {
-    this.updateCount()
+  startBrew(){
+    this.socket.emit('/startBrew')
+    this.props.userStore.user.userCupcount = 0;
   }
 
-  updateCount(){
-    console.log('triggered')
+  addCup(){
+    if (this.props.userStore.user.userCupcount <= 11) {
     this.props.userStore.user.userCupcount = this.props.userStore.user.userCupcount + 1;
     this.socket.emit('/postcup', {
       cupcount: this.props.userStore.user.userCupcount,
       userid: this.props.userStore.user.id
-    })
+      })
+    } else {
+      alert('Coffee pot at capacity!');
+    }
   }
   
   componentDidMount(){
@@ -49,7 +51,13 @@ var Homepage = observer(class Homepage extends Component {
           return total
         }
         let totalCupcount = sample.sum(`cupcount`);
+        if (this.props.userStore.user.totalCount <= 12) {
         this.props.userStore.user.totalCount = totalCupcount;
+        } else {
+          this.props.userStore.user.totalCount = 12;
+          alert('Coffee pot at capacity!');
+        }
+        this.props.userStore.user.users = data;
         })
     })
   }
@@ -58,14 +66,12 @@ var Homepage = observer(class Homepage extends Component {
     if (this.props.userStore.user) {
     return (
       <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
-        Hello, {this.props.userStore.user.firstName} !
-        <Button onClick={this.addCup}>This user wants:
-        {this.props.userStore.user.userCupcount} cups of coffee!
+        <Button onClick={this.addCup}>Add a cup!
         </Button>
-        <Total />
         <hr/>
         People who want coffee:
         <Users/>
+        <Button onClick={this.startBrew}>Start Brew</Button>
       </div>
     )} else {
       return(

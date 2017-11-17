@@ -1,60 +1,58 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Icon from 'material-ui/Icon';
-import { inject, observer } from 'mobx-react'; 
- 
+import { inject, observer } from 'mobx-react';
+
 // function Navbar(props) {
 // var Navbar = observer(class Navbar extends Component {
-  const styles = theme => ({
-    root: {
-      marginTop: theme.spacing.unit * 3,
-      width: '100%',
-    },
-    flex: {
-      flex: 1,
-    },
-    menuButton: {
-      marginLeft: -12,
-      marginRight: 20,
-    },
-  });
+const styles = theme => ({
+  root: {
+    marginTop: theme.spacing.unit * 3,
+    width: '100%',
+  },
+  flex: {
+    flex: 1,
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
+  },
+});
 
-  
+
 var Navbar = observer(class Navbar extends Component {
-  render() {  
+  render() {
     const { classes } = this.props;
     let entryLinks = [];
     if (this.props.userStore.user) {
-      let first = (this.props.userStore.user) ? this.props.userStore.user.firstName : ''; // ternary operator
-        entryLinks.push(<Link className="item" key='linkLogout' to="/logout"><Button color="contrast">Logout</Button></Link>);
-      } else {
-        entryLinks.push(<Link className="item" key='linkLogin' to="/login"><Button color="contrast">Login</Button></Link>);
-        entryLinks.push(<Link className="item" key='linkSignup' to="/signup"><Button color="contrast">Signup</Button></Link>);
-      }
-
-      return (
-        <div className={classes.root} style={{marginTop: '0'}}>
-          <AppBar position="static">
-            <Toolbar>
-              
-            <Icon color="contrast">&#xE01B;</Icon>
-      
-              <Typography type="title" className={classes.flex}>
-                <Link style={{color:'#fff'}} color="contrast" to="/">Coffee Pot Pi</Link>
-              </Typography>
-            {entryLinks}
-              
-            </Toolbar>
-          </AppBar>
-        </div>
-      );
+      //let first = (this.props.userStore.user) ? this.props.userStore.user.firstName : ''; // ternary operator
+      entryLinks.push(<Link className="item" key='userName' to="/profile"><Button color="contrast">{this.props.userStore.user.firstName}</Button></Link>)      
+      entryLinks.push(<Link className="item" key='linkLogout' to="/logout"><Button color="contrast">Logout</Button></Link>);
+    } else {
+      entryLinks.push(<Link className="item" key='linkLogin' to="/login"><Button color="contrast">Login</Button></Link>);
+      entryLinks.push(<Link className="item" key='linkSignup' to="/signup"><Button color="contrast">Signup</Button></Link>);
     }
+
+    return (
+      <div className={classes.root} style={{ marginTop: '0' }}>
+        <AppBar position="static">
+          <Toolbar>
+            <Icon color="contrast">&#xE01B;</Icon>
+            <Typography type="title" className={classes.flex}>
+              <Link style={{ color: '#fff' }} color="contrast" to="/">Coffee Pot Pi</Link>
+            </Typography>
+            {entryLinks}
+          </Toolbar>
+        </AppBar>
+      </div>
+    );
+  }
 });
 
 Navbar.propTypes = {

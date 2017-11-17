@@ -83,7 +83,7 @@ passport.deserializeUser((id, done) => {
     client.on('/postcup', (data) => {
       let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
       pool.query(updateQuery, (err,rows) => { 
-        let query = `SELECT * FROM history`
+        let query = `SELECT * FROM users INNER JOIN history ON users.id = history.userid`
         pool.query(query, (err, rows) => {
           data = rows.rows;
           ioServer.in(rows).emit('postedCup', data);
@@ -91,41 +91,17 @@ passport.deserializeUser((id, done) => {
       })
     })
 
-    // client.on('/postcup', (data) => {
-    //   let sum = {
-    //     totalCount: 0,
-    //     userCount: 0
-    //   }
-    //     let query = `SELECT * FROM history where userid = ${data.userid}`
-    //     pool.query(query, (err, rows) => {
-    //         if (rows.rowCount > 0) {
-    //           let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
-    //           pool.query(updateQuery, (err,rows) => {
-    //             sum.userCount = rows.rows[0].cupcount;
-    //             if (err) throw err;
-    //             let sumQuery = `select sum(cupcount) from history where status = 0;`
-    //             pool.query(sumQuery, (err, rows) => {
-    //               sum.totalCount = parseInt(rows.rows[0].sum);            
-    //               ioServer.in(rows).emit('postedCup', sum);
-    //             })
-
-    //         })
-    //       } else {
-    //           let newQuery = `INSERT INTO history (cupcount, status, userid) values (1, 0, ${data.userid}) RETURNING cupcount`;
-    //           pool.query(newQuery, (err,rows) => {
-    //             console.log(rows)
-    //             sum.userCount = rows.rows[0].cupcount;
-    //               if (err) throw err;
-    //               let sumQuery = `select sum(cupcount) from history where status = 0;`
-    //               pool.query(sumQuery, (err, rows) => {
-    //                 sum.totalCount = parseInt(rows.rows[0].sum);            
-    //                 ioServer.in(rows).emit('postedCup', sum);
-    //               })
-    //             })
-    //           }
-    //       if (err) throw err;
-    //     });
-    // });
+    client.on('/startBrew', (data) => {
+      let startQuery = `UPDATE history SET cupcount = 0 WHERE id > 0`
+      pool.query(startQuery, (err, rows) => {
+        let secondQuery = `SELECT * FROM users INNER JOIN history ON users.id = history.userid`
+        pool.query(secondQuery, (err, rows) => {
+          console.log(rows.rows)
+          data = rows.rows;
+          ioServer.in(rows).emit('postedCup', data);
+        })
+      })
+    })
     client.on('disconnect', ()=>{console.log("client disconnected")});
   });
 
@@ -198,34 +174,6 @@ app.post('/signup', (req, res, next) => {
     res.json(user.rows);
   });    
 });
-
-// app.post('/getCount', (req, res, next) => {
-//   let query = `SELECT sum(cupcount) FROM history where status = 0;`
-//   pool.query(query, (err, rows) => {
-//     if (err) throw err;
-//     console.log(rows.rows);
-//     res.json(rows.rows);
-//   })
-// })
-
-// app.post('/postcup', (req, res, next) => {
-//   let query = `SELECT * FROM history where userid = 33`
-//   pool.query(query, (err, rows) => {
-//     if (rows.rows.length > 0) {
-//       let updateQuery = `UPDATE history SET cupcount = ${req.body.cupcount} where userid = ${req.body.userid}`
-//       pool.query(updateQuery, (err,rows) => {
-//         if (err) throw err;
-//     })
-//   } else {
-//       let newQuery = `INSERT INTO history (cupcount, status, userid) values ('${req.body.cupcount}', 0, '${req.body.userid}')`;
-//       pool.query(newQuery, (err,rows) => {
-//           console.log(rows);
-//           if (err) throw err;
-//         })
-//     }
-//     if (err) throw err;
-//     });
-// });
 
 app.post('/logout', (req, res) => {
   req.logout();

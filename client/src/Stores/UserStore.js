@@ -21,6 +21,7 @@ export default class UserStore {
         lastName: signupObj.lastName,
         email: signupObj.email,
         password: signupObj.password,
+        image: signupObj.image
       }).then((res) => {
         this.user = res.data[0];
         resolve();

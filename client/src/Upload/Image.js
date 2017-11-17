@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from 'material-ui';
-
+import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 const axios = require("axios");
 
-export default class Image extends Component {
+var Image = observer(class Image extends Component {
   constructor() {
     super();
     this.initUpload = this.initUpload.bind(this);
@@ -41,6 +42,7 @@ export default class Image extends Component {
       axios.get(`/sign-s3?file-name=${file.name}&file-type=${file.type}&file-size=${file.size}`)
       .then((res) => {
         console.log(res.data);
+        this.props.userStore.imageurl = res.data.url
         this.uploadFile(file, res.data.signedRequest, res.data.url);
         resolve();
       });
@@ -78,4 +80,6 @@ export default class Image extends Component {
 </div>
     );
   }
-}
+})
+
+export default withRouter(inject('userStore')(Image));

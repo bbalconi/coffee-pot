@@ -29,6 +29,7 @@ var SignUp = observer(class SignUp extends Component {
   }
 
   handleSignup() {
+    console.log(this.props.userStore)
     if (this.state.password === this.state.confirmPassword) {
       return new Promise((resolve, reject) => {
         this.props.userStore.submitSignup({
@@ -36,6 +37,7 @@ var SignUp = observer(class SignUp extends Component {
           lastName: this.state.lastName,
           email: this.state.email,
           password: this.state.password,
+          image: this.props.userStore.imageurl
         }).then(() => {
           console.log(this.props.userStore.user)
           if (this.props.userStore.user != null) {
@@ -130,7 +132,7 @@ var SignUp = observer(class SignUp extends Component {
 
 
           </Grid>
-          <Grid item>          
+          <Grid item>
             <TextField
               id="password"
               label="Confirm Password"
@@ -144,9 +146,9 @@ var SignUp = observer(class SignUp extends Component {
             /></Grid>
 
         </Grid>
-       
-          <UploadImage/>
-      
+
+        <UploadImage />
+
         <Grid>
           <Grid item>
             <p>{this.state.message}</p>

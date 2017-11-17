@@ -7,6 +7,9 @@ const axios = require("axios");
 var Image = observer(class Image extends Component {
   constructor() {
     super();
+    this.state = {
+      message: ''
+    }
     this.initUpload = this.initUpload.bind(this);
     this.getSignedRequest = this.getSignedRequest.bind(this);
     this.uploadFile = this.uploadFile.bind(this);
@@ -29,7 +32,10 @@ var Image = observer(class Image extends Component {
           document.getElementById('avatar-url').value = url;
         }
         else {
-          alert('Could not upload file.');
+          // alert('Could not upload file.');
+          this.setState({
+            message: "Could not upload file. File type should be jpg, png or gif."
+          })
         }
       }
     };
@@ -61,23 +67,23 @@ var Image = observer(class Image extends Component {
      
     return (
       <div>
-       <Grid item>
-       <img style={{width: '100px', height: 'auto'}} id="preview" src="/images/default.png"/>      
+        <Grid item>
+        <img style={{width: '100px', height: 'auto'}} id="preview" src="/images/default.png"/>      
         <input type="hidden" id="avatar-url" name="avatar-url" value="/images/default.png"/>
-      
-         
-      </Grid>
-      <Grid item>
-          <TextField
-              onChange={this.handleChange} 
-              type="file" 
-              id="file-input" 
-              name="file-input"
-              label="Please select a file"
-              lineDirection="center"
-            />
+          
         </Grid>
-</div>
+        <Grid item>
+            <TextField
+                onChange={this.handleChange} 
+                type="file" 
+                id="file-input" 
+                name="file-input"
+                label="Please select a file"
+                lineDirection="center"
+              />
+          </Grid>
+          {this.state.message}
+        </div>
     );
   }
 })

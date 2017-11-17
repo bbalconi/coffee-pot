@@ -193,7 +193,7 @@ const S3_BUCKET = process.env.S3_BUCKET;
 
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
-  if (fileType === 'image/png' || fileType === 'image/jpeg') {
+  if (fileType === 'image/png' || fileType === 'image/jpeg' || fileType === 'image/gif') {
     const s3Params = {
       Bucket: S3_BUCKET,
       Key: fileName,

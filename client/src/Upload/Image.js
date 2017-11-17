@@ -35,10 +35,13 @@ export default class Image extends Component {
 
   getSignedRequest(file){
     const xhr = new XMLHttpRequest();
-
+    console.log("______________________________!")
+    console.log(file)
     return new Promise((resolve, reject) => {
-      axios.get(`/sign-s3?file-name=${file.name}&file-type=${file.type}`).then((res) => {
+      axios.get(`/sign-s3?file-name=${file.name}&file-type=${file.type}&file-size=${file.size}`)
+      .then((res) => {
         console.log(res.data);
+        this.uploadFile(file, res.data.signedRequest, res.data.url);
         resolve();
       });
     }) 
@@ -59,6 +62,7 @@ export default class Image extends Component {
   }
   initUpload() {
     const files = document.getElementById('file-input').files;
+    console.log(files);
     const file = files[0];
     if(file == null){
       return alert('No file selected.');

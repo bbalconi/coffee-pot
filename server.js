@@ -12,13 +12,14 @@ var cookieParser = require('cookie-parser');
 var http = require('http');
 var path  = require('path');
 const { Pool } = require('pg');
-const aws = require('aws-sdk');
+const AWS = require('aws-sdk');
+// var fmt = require('fmt');
+// var amazonS3 = require('awssum-amazon-s3');
+// var fs = require('fs');
+
 require('dotenv').config();
 
-aws.config.region = 'us-west-1';
-const S3_BUCKET = process.env.S3_BUCKET;
-var accessKeyId = process.env.AWS_KEY;
-var secretAccessKey = process.env.AWS_ACCESS;
+
 
 /*
  * Respond to GET requests to /sign-s3.
@@ -26,29 +27,144 @@ var secretAccessKey = process.env.AWS_ACCESS;
  * the anticipated URL of the image.
  */
 app.get('/sign-s3', (req, res) => {
-  
-  var s3 = new aws.S3({
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
-    region: "us-west-1" 
-  });
-  // s3.config = new aws.Config();
-  
+
+  // AWS.config.region = 'us-west-1';
+  // const S3_BUCKET = process.env.S3_BUCKET;
+  // var accessKeyId = process.env.S3_KEY;
+  // var secretAccessKey = process.env.S3_ACCESS;
+
+
+var s3 = new AWS.S3({
+  'accessKeyId'     : process.env.ACCESS_KEY_ID,
+  'secretAccessKey' : process.env.SECRET_ACCESS_KEY,
+  'region'          : 'us-west-1'
+});
+
+/* 
+// lists all buckets
+s3.ListBuckets(function(err, data) {
+  fmt.dump(err, 'err');
+  fmt.dump(data, 'data');
+});
+*/
+
+const S3_BUCKET = process.env.S3_BUCKET;
+
+console.log(req.query);
  
-var params = {
+const __filename = req.query['file-name'];
+ 
+var s3Params = {
     Bucket: process.env.S3_BUCKET,
     Key: 'mykey.txt',
     Body: "HelloWorld"
 };
-s3.putObject(params, function (err, res) {
-    if (err) {
-        console.log("Error uploading data: ", err);
-    } else {
-      console.log(res);
-      resolve();
-        console.log("Successfully uploaded data to myBucket/myKey");
+
+  s3.getSignedUrl('putObject', s3Params, (err, data) => {
+    if(err){
+      console.log(err);
+      return res.end();
     }
-});
+    console.log(S3_BUCKET + __filename)
+    const returnData = {
+      signedRequest: data,
+      url: `https://${S3_BUCKET}.s3.amazonaws.com/${__filename}`
+    };
+    console.log(returnData);
+    res.write(JSON.stringify(returnData));
+    res.end();
+  });
+
+  // const fileType = req.query['file-type'];
+  // const s3Params = {
+
+// fs.stat(__filename, function(err, file_info) {
+//   var bodyStream = fs.createReadStream( __filename );
+//   // const stats = fs.statSync(__filename);
+//   console.log("----------------")
+//   console.log(bodyStream);
+
+//   var options = {
+//       BucketName    : process.env.S3_BUCKET,
+//       ObjectName    : __filename,
+//       ContentLength : req.query['file-size'],
+//       Body          : bodyStream
+//   };
+
+//   s3.PutObject(options, function(err, data) {
+//       fmt.dump(err, 'err');
+//       fmt.dump(data, 'data');
+//   });
+
+// });
+
+
+  
+
+
+// var params = {
+//     Bucket: process.env.S3_BUCKET,
+//     Key: 'mykey.txt',
+//     Body: "HelloWorld"
+// };
+
+// s3.putObject(params, function (err, res) {
+//     if (err) {
+//         console.log("Error uploading data: ", err);
+//     } else {
+//       console.log(res);
+//       resolve();
+//         console.log("Successfully uploaded data to myBucket/myKey");
+//     }
+// });
+  
+  // var s3 = new aws.S3({
+  //   accessKeyId: accessKeyId,
+  //   secretAccessKey: secretAccessKey,
+  //   region: "us-west-1" 
+  // });
+  // s3.config = new aws.Config();
+  
+ 
+// var params = {
+//     Bucket: process.env.S3_BUCKET,
+//     Key: 'mykey.txt',
+//     Body: "HelloWorld"
+// };
+
+
+
+// console.log(S3_BUCKET, accessKeyId, secretAccessKey)
+
+// var myBucket = S3_BUCKET;
+// var myKey = accessKeyId;
+// var s3 = new AWS.S3();
+
+// s3.createBucket({Bucket: myBucket}, function(err, data) {
+// if (err) {
+//    console.log(err);
+//    } else {
+//      params = {Bucket: myBucket, region: "us-west-1", Key: myKey, Body: 'Hello!'};
+//      s3.putObject(params, function(err, data) {
+//          if (err) {
+//              console.log(err)
+//          } else {
+//              console.log("Successfully uploaded data to myBucket/myKey");
+//          }
+//       });
+//    }
+// });
+
+ 
+// s3.putObject(params, function (err, res) {
+//     if (err) {
+//         console.log("Error uploading data: ", err);
+//     } else {
+//       console.log(res);
+//       resolve();
+//         console.log("Successfully uploaded data to myBucket/myKey");
+//     }
+// });
 
 
 

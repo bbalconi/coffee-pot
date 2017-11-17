@@ -13,24 +13,28 @@ var Homepage = observer(class Homepage extends Component {
   constructor(){
     super()
     this.addCup = this.addCup.bind(this)
-    this.updateCount = this.updateCount.bind(this)
+    this.startBrew = this.startBrew.bind(this)
     this.socket;
     this.state = {
       num: 0
     }
   }
 
-
-  addCup() {
-    this.updateCount()
+  startBrew(){
+    this.socket.emit('/startBrew')
+    this.props.userStore.user.userCupcount = 0;
   }
 
-  updateCount(){
+  addCup(){
+    if (this.props.userStore.user.userCupcount <= 11) {
     this.props.userStore.user.userCupcount = this.props.userStore.user.userCupcount + 1;
     this.socket.emit('/postcup', {
       cupcount: this.props.userStore.user.userCupcount,
       userid: this.props.userStore.user.id
-    })
+      })
+    } else {
+      alert('Coffee pot at capacity!');
+    }
   }
   
   componentDidMount(){
@@ -39,25 +43,36 @@ var Homepage = observer(class Homepage extends Component {
       this.socket = openSocket(socketUrl)
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
-        this.props.userStore.user.userCupcount = data.userCount;
-        this.props.userStore.user.totalCount = data.totalCount
-      })
+        let sample = data
+        Array.prototype.sum = function (prop) {
+          let total = 0;
+          for (let i = 0, _len = this.length; i < _len; i++) {
+            total +=this[i][prop]
+          }
+          return total
+        }
+        let totalCupcount = sample.sum(`cupcount`);
+        if (this.props.userStore.user.totalCount <= 12) {
+        this.props.userStore.user.totalCount = totalCupcount;
+        } else {
+          this.props.userStore.user.totalCount = 12;
+          alert('Coffee pot at capacity!');
+        }
+        this.props.userStore.user.users = data;
+        })
     })
   }
 
   render() {
-    console.log(this.props.userStore.user)
     if (this.props.userStore.user) {
     return (
       <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
-        Hello, {this.props.userStore.user.firstName} !
-        <Button onClick={this.addCup}>This user wants:
-        {this.props.userStore.user.userCupcount} cups of coffee!
+        <Button onClick={this.addCup}>Add a cup!
         </Button>
-        <p>All users want: {this.props.userStore.user.totalCount}</p>
         <hr/>
         People who want coffee:
         <Users/>
+        <Button onClick={this.startBrew}>Start Brew</Button>
       </div>
     )} else {
       return(

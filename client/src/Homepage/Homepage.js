@@ -40,15 +40,21 @@ var Homepage = observer(class Homepage extends Component {
       this.socket = openSocket(socketUrl)
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
-        console.log(data)
-        this.props.userStore.user.userCupcount = data.userCount;
-        this.props.userStore.user.totalCount = data.totalCount
-      })
+        let sample = data
+        Array.prototype.sum = function (prop) {
+          let total = 0;
+          for (let i = 0, _len = this.length; i < _len; i++) {
+            total +=this[i][prop]
+          }
+          return total
+        }
+        let totalCupcount = sample.sum(`cupcount`);
+        this.props.userStore.user.totalCount = totalCupcount;
+        })
     })
   }
 
   render() {
-    console.log(this.props.userStore.user)
     if (this.props.userStore.user) {
     return (
       <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>

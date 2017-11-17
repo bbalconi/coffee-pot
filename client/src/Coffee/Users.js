@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component }  from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
+import { inject, observer } from 'mobx-react'; 
 import Avatar from 'material-ui/Avatar';
 import Chip from 'material-ui/Chip';
 import FaceIcon from 'material-ui-icons/Face';
@@ -16,36 +17,51 @@ const styles = theme => ({
   },
   row: {
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'left',
     flexWrap: 'wrap',
   },
 });
 
-function handleRequestDelete() {
-  alert('You clicked the delete icon.'); // eslint-disable-line no-alert
-}
+var Chips = observer(class Chips extends Component {
 
-function handleClick() {
-  alert('You clicked the Chip.'); // eslint-disable-line no-alert
-}
+// handleRequestDelete() {
+//   alert('You clicked the delete icon.'); // eslint-disable-line no-alert
+// }
 
-function Chips(props) {
-  const { classes } = props;
-  return (
-    <div className={classes.row}>
-      
+  renderChip(data) {
+    console.log(data);
+    const { classes } = this.props    
+    return (
+      <div className={classes.row}>
       <Chip
-        avatar={<Avatar src="https://en.gravatar.com/userimage/8407579/e6e461e72b86ea49ac6ecb4aeb55f06a.jpeg" />}
-        label="Jeanine" 
+        key={data.key}
+        avatar={<Avatar src={data.image} />}
+        label= {data.firstname}
         className={classes.chip}
       />
-      
-    </div>
-  );
-}
+      <Chip
+        key={data.key}
+        avatar={<Avatar src='http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/glossy-black-icons-food-beverage/056880-glossy-black-icon-food-beverage-coffee-tea.png' />}
+        label= {data.cupcount}
+        className={classes.chip}
+      />
+      </div>   
+    );
+  }
+
+  render() {
+    const { classes } = this.props        
+    let userArray = this.props.userStore.user.users.slice();     
+      return (
+        <div>
+          {userArray.map(this.renderChip, this)}
+        </div>
+      );
+  }
+});
 
 Chips.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Chips);
+export default inject('userStore')(withStyles(styles)(Chips));

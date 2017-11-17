@@ -24,7 +24,7 @@ const pool = new Pool({
 
 
  
-var allowedOrigins = "http://localhost:* http://192.168.*.*:* https://coffee-pot-pi.herokuapp.com:* https://coffee-pot-pi.herokuapp.com:*";
+var allowedOrigins = "http://localhost:* http://192.168.*.*:* https://coffee-pot-pi.herokuapp.com:*";
 var ioServer = io(server, {
   origins: allowedOrigins
 });
@@ -81,40 +81,51 @@ passport.deserializeUser((id, done) => {
     });
 
     client.on('/postcup', (data) => {
-      let sum = {
-        totalCount: 0,
-        userCount: 0
-      }
-        let query = `SELECT * FROM history where userid = ${data.userid}`
+      let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
+      pool.query(updateQuery, (err,rows) => { 
+        let query = `SELECT * FROM history`
         pool.query(query, (err, rows) => {
-            if (rows.rowCount > 0) {
-              let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
-              pool.query(updateQuery, (err,rows) => {
-                sum.userCount = rows.rows[0].cupcount;
-                if (err) throw err;
-                let sumQuery = `select sum(cupcount) from history where status = 0;`
-                pool.query(sumQuery, (err, rows) => {
-                  sum.totalCount = parseInt(rows.rows[0].sum);            
-                  ioServer.in(rows).emit('postedCup', sum);
-                })
+          data = rows.rows;
+          ioServer.in(rows).emit('postedCup', data);
+        })
+      })
+    })
 
-            })
-          } else {
-              let newQuery = `INSERT INTO history (cupcount, status, userid) values (1, 0, ${data.userid}) RETURNING cupcount`;
-              pool.query(newQuery, (err,rows) => {
-                console.log(rows)
-                sum.userCount = rows.rows[0].cupcount;
-                  if (err) throw err;
-                  let sumQuery = `select sum(cupcount) from history where status = 0;`
-                  pool.query(sumQuery, (err, rows) => {
-                    sum.totalCount = parseInt(rows.rows[0].sum);            
-                    ioServer.in(rows).emit('postedCup', sum);
-                  })
-                })
-              }
-          if (err) throw err;
-        });
-    });
+    // client.on('/postcup', (data) => {
+    //   let sum = {
+    //     totalCount: 0,
+    //     userCount: 0
+    //   }
+    //     let query = `SELECT * FROM history where userid = ${data.userid}`
+    //     pool.query(query, (err, rows) => {
+    //         if (rows.rowCount > 0) {
+    //           let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
+    //           pool.query(updateQuery, (err,rows) => {
+    //             sum.userCount = rows.rows[0].cupcount;
+    //             if (err) throw err;
+    //             let sumQuery = `select sum(cupcount) from history where status = 0;`
+    //             pool.query(sumQuery, (err, rows) => {
+    //               sum.totalCount = parseInt(rows.rows[0].sum);            
+    //               ioServer.in(rows).emit('postedCup', sum);
+    //             })
+
+    //         })
+    //       } else {
+    //           let newQuery = `INSERT INTO history (cupcount, status, userid) values (1, 0, ${data.userid}) RETURNING cupcount`;
+    //           pool.query(newQuery, (err,rows) => {
+    //             console.log(rows)
+    //             sum.userCount = rows.rows[0].cupcount;
+    //               if (err) throw err;
+    //               let sumQuery = `select sum(cupcount) from history where status = 0;`
+    //               pool.query(sumQuery, (err, rows) => {
+    //                 sum.totalCount = parseInt(rows.rows[0].sum);            
+    //                 ioServer.in(rows).emit('postedCup', sum);
+    //               })
+    //             })
+    //           }
+    //       if (err) throw err;
+    //     });
+    // });
     client.on('disconnect', ()=>{console.log("client disconnected")});
   });
 
@@ -140,8 +151,27 @@ passport.deserializeUser((id, done) => {
               } else {
                 userCupcount = 0
               }
-              res.json({ found: true, success: true, id: user.id, totalCount: sum, userCupcount: userCupcount, email: user.email, firstName: user.firstname, lastName: user.lastname })
+              let theseUsers = {
+                cupcount: null
+              }
+              let userQuery = `SELECT * FROM users INNER JOIN history ON users.id = history.userid`;
+              pool.query(userQuery, (error, users) => {
+                console.log(userQuery)
+                console.log(users.rows)
+                if (error) throw error;
+                theseUsers = users.rows;
+                res.json({ 
+                  users: theseUsers,
+                  found: true, 
+                  success: true, 
+                  id: user.id, 
+                  totalCount: sum, 
+                  userCupcount: userCupcount, 
+                  email: user.email, 
+                  firstName: user.firstname, 
+                  lastName: user.lastname })
               })
+            })
           })
         }
       })
@@ -157,7 +187,7 @@ app.post('/socketUrl', (req, res)=>{
   if (process.env.PORT){
     res.json('https://coffee-pot-pi.herokuapp.com:');
   } else {
-    res.json('http://192.168.1.17:5000')
+    res.json('http://localhost:5000')
   }
 });
 

@@ -226,8 +226,12 @@ app.post('/save-details', (req, res) => {
 });
 
 app.post('/signup', (req, res, next) => {
- let query = `INSERT INTO users (firstname, lastname, email, password) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}') RETURNING id, firstname, lastname, email`  
+ let query = `INSERT INTO users (firstname, lastname, email, password) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}') RETURNING id, firstname, lastname, email, id`  
   pool.query(query, (err, user) => {
+    let insertQuery = `INSERT INTO history (cupcount, status, userid) values (0, 0, ${user.rows[0].id})`
+    pool.query(insertQuery, (err, rows) => {
+      if (err) throw err;
+    })
   if (err) throw err;
     res.json(user.rows);
   });    

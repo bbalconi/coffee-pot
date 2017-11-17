@@ -11,6 +11,8 @@
     "mobx": "^3.3.1",
     "mobx-react": "^4.3.4",
     "react": "^16.1.1",
+    "react-countdown": "^2.0.0",
+    "react-countdown-now": "^1.2.0",
     "react-dom": "^16.1.1",
     "react-password-strength": "^2.2.0",
     "react-router-dom": "^4.2.2",
@@ -19,6 +21,7 @@
     "aws-sdk": "2.x",
     "ejs": "2.x",
     "express": "4.x"
+    "socket.io-client": "^2.0.4"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -29,7 +29,9 @@ var Chips = observer(class Chips extends Component {
   // }
 
   renderChip(data) {
+    console.log(data)
     const { classes } = this.props
+    if (data.image) {
     return (
       <div className={classes.row}>
         <Chip
@@ -45,7 +47,23 @@ var Chips = observer(class Chips extends Component {
           className={classes.chip}
         />
       </div>
-    );
+    )} else {
+      return (
+        <div className={classes.row}>
+          <Chip
+            key={data.key}
+            avatar={<Avatar src='http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' />}
+            label={data.firstname}
+            className={classes.chip}
+          />
+          <Chip
+            key={data.key}
+            avatar={<Avatar src='http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/glossy-black-icons-food-beverage/056880-glossy-black-icon-food-beverage-coffee-tea.png' />}
+            label={data.cupcount}
+            className={classes.chip}
+          />
+        </div>
+      )}
   }
 
   render() {

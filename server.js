@@ -193,36 +193,31 @@ const S3_BUCKET = process.env.S3_BUCKET;
 
   const fileName = req.query['file-name'];
   const fileType = req.query['file-type'];
-  const s3Params = {
-    Bucket: S3_BUCKET,
-    Key: fileName,
-    Expires: 60,
-    ContentType: fileType,
-    ACL: 'public-read'
-  };
-
-  s3.getSignedUrl('putObject', s3Params, (err, data) => {
-    if(err){
-      console.log(err);
-      return res.end();
-    }
-    const returnData = {
-      signedRequest: data,
-      url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+  if (fileType === 'image/png' || fileType === 'image/jpeg') {
+    const s3Params = {
+      Bucket: S3_BUCKET,
+      Key: fileName,
+      Expires: 60,
+      ContentType: fileType,
+      ACL: 'public-read'
     };
-    res.write(JSON.stringify(returnData));
-    res.end();
-  });
-});
 
-/*
- * Respond to POST requests to /submit_form.
- * This function needs to be completed to handle the information in
- * a way that suits your application.
- */
-app.post('/save-details', (req, res) => {
-  // TODO: Read POSTed form data and do something useful
-  // actually this can just be implemented inside signup?
+    s3.getSignedUrl('putObject', s3Params, (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.end();
+      }
+      const returnData = {
+        signedRequest: data,
+        url: `https://${S3_BUCKET}.s3.amazonaws.com/${fileName}`
+      };
+      res.write(JSON.stringify(returnData));
+      res.end();
+    });
+  } else {
+    console.log('invalid file type')
+    res.end();
+  }
 });
 
 app.post('/signup', (req, res, next) => {

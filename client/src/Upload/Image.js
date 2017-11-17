@@ -30,6 +30,9 @@ var Image = observer(class Image extends Component {
           console.log(url)
           document.getElementById('preview').src = url;
           document.getElementById('avatar-url').value = url;
+          this.setState({
+            message: ""
+          })
         }
         else {
           // alert('Could not upload file.');

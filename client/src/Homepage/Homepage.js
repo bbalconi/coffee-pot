@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import Countdown from 'react-countdown-now';
 import { Button } from 'reactstrap'
 import openSocket from 'socket.io-client';
-import Animation from '../Coffee/Animation';
+import Loading from '../Coffee/Loading';
 import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
 var axios = require('axios')
@@ -44,7 +44,7 @@ var Homepage = observer(class Homepage extends Component {
       userid: this.props.userStore.user.id
       })
     } else {
-      alert('Coffee pot at capacity!');
+      alert('Coffee pot at capacity!')
     }
   }
   
@@ -92,11 +92,13 @@ var Homepage = observer(class Homepage extends Component {
       console.log('muthafucka')
       return (
         <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
-          <Animation />
-          <Countdown 
-            date={Date.now() + 600000}
+          <Loading />
+          <div className='sr-only'>
+          <Countdown
+            style={{color: "red"}} 
+            date={Date.now() + 60000}
             onComplete={this.endBrew}
-           />
+           /></div>
         </div>
       )} else {
       return(

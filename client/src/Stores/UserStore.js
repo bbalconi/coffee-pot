@@ -7,6 +7,7 @@ export default class UserStore {
   constructor() {
     extendObservable(this, {
       user: null,
+      message: '',
       get retrieveUser() {
         return this.user
       }
@@ -35,6 +36,7 @@ export default class UserStore {
       }).then((res, err) => {
         if (err) throw err;
         if (res.data.success) {
+          console.log(res.data)
           this.user = res.data
           resolve(res.data);
         } else {

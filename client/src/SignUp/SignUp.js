@@ -46,19 +46,19 @@ var SignUp = observer(class SignUp extends Component {
   }
   // change these to one function
   inputfirstNameChange(e) {
-    this.setState({ firstName: e });
+    this.setState({ firstName: e.target.value });
   }
   inputlastNameChange(e) {
-    this.setState({ lastName: e });
+    this.setState({ lastName: e.target.value });
   }
   inputemailChange(e) {
-    this.setState({ email: e });
+    this.setState({ email: e.target.value });
   }
   changeCallback(event) {
     this.setState({ password: event.password });
   }
   confirmPassword(e) {
-    this.setState({ confirmPassword: e });
+    this.setState({ confirmPassword: e.target.value });
   }
 
   _handleKeyPress(e) {

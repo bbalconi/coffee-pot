@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom';
 import ReactPasswordStrength from 'react-password-strength';
 import { Grid, TextField, Button } from 'material-ui';
 import './SignUp.css';
+import UploadImage from '../Upload/Image';
+
 import { inject, observer } from 'mobx-react';
 
 var SignUp = observer(class SignUp extends Component {
@@ -142,6 +144,9 @@ var SignUp = observer(class SignUp extends Component {
             /></Grid>
 
         </Grid>
+       
+          <UploadImage/>
+      
         <Grid>
           <Grid item>
             <p>{this.state.message}</p>

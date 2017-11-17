@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Grid, TextField, Button } from 'material-ui';
+
 const axios = require("axios");
 
 export default class Image extends Component {
@@ -35,8 +37,6 @@ export default class Image extends Component {
 
   getSignedRequest(file){
     const xhr = new XMLHttpRequest();
-    console.log("______________________________!")
-    console.log(file)
     return new Promise((resolve, reject) => {
       axios.get(`/sign-s3?file-name=${file.name}&file-type=${file.type}&file-size=${file.size}`)
       .then((res) => {
@@ -45,20 +45,6 @@ export default class Image extends Component {
         resolve();
       });
     }) 
-
-    // xhr.open('GET', `/sign-s3?file-name=${file.name}&file-type=${file.type}`);
-    // xhr.onreadystatechange = () => {
-    //   if(xhr.readyState === 4){
-    //     if(xhr.status === 200){
-    //       const response = JSON.parse(xhr.responseText);
-    //       //this.uploadFile(file, response.signedRequest, response.url);
-    //     }
-    //     else{
-    //       alert('Could not get signed URL.');
-    //     }
-    //   }
-    // };
-    // xhr.send();
   }
   initUpload() {
     const files = document.getElementById('file-input').files;
@@ -70,19 +56,26 @@ export default class Image extends Component {
     this.getSignedRequest(file);
   }
   render() {
+     
     return (
       <div>
-        <input onChange={this.handleChange} type="file" id="file-input"/>
-          <p id="status">Please select a file</p>
-          <img  id="preview" src="/images/default.png"/>
-
-          <form method="POST" action="/save-details">
-          <input type="hidden" id="avatar-url" name="avatar-url" value="/images/default.png"/>
-          <input type="text" name="username" placeholder="Username"/> <br/>
-          <input type="text" name="full-name" placeholder="Full name"/> <br/> <br/>
-          <input type="submit" value="Update profile" />
-          </form>
-      </div>
+       <Grid item>
+       <img style={{width: '100px', height: 'auto'}} id="preview" src="/images/default.png"/>      
+        <input type="hidden" id="avatar-url" name="avatar-url" value="/images/default.png"/>
+      
+         
+      </Grid>
+      <Grid item>
+          <TextField
+              onChange={this.handleChange} 
+              type="file" 
+              id="file-input" 
+              name="file-input"
+              label="Please select a file"
+              lineDirection="center"
+            />
+        </Grid>
+</div>
     );
   }
 }

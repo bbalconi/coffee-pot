@@ -22,13 +22,13 @@ export default class Animation extends Component {
       document.getElementById("coffeecup").style.height = divheight * (height/100)+ "px"; 
     } 
      
-    var interval = 100; // how often to update in ms (100 times)
-    for (let i = 0; i <= 100; i++) {
+    var interval = 6000; // how often to update in ms (100 times)
+    for (let i = 100; i >= 0; i--) {
         setTimeout( ()=> {
             // Do Something 
           updateHeight(i);
           this.setState({percent: i})
-        }, i * interval)
+        }, Math.abs(100 - i) * interval)
     }
     
   }
@@ -36,7 +36,7 @@ export default class Animation extends Component {
    
     return (
       <div >
-        <div>
+        <div style={{ width: '50%'}}>
         <div id="underlay" class="sm bg-underlay">
           <div class="svg-icon bg">
             <div class="svg-container">
@@ -70,7 +70,7 @@ export default class Animation extends Component {
         </div>
         </div>
         <div style={{textAlign:'center'}}>
-          <h3>Status: {this.state.percent}% complete</h3>
+          <h3>Brewing: {this.state.percent}% complete</h3>
         </div>
       </div>
     );

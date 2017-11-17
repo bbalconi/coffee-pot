@@ -2,7 +2,7 @@
  
 .sm { position: absolute; top:0; z-index: 1; width:100%; display:block;} 
 .bg-underlay { z-index:-1; position:absolute;top:0; position:relative;}
-.bg-underlay .svg-container .coffeecup { fill: #795548;}
+.bg-underlay .svg-container .coffeecup { fill: #000;}
 svg { height:auto; }
 .svg-icon { width:100%;margin:0 auto; }
 .svg-icon { position:relative;bottom:0; height:50%; overflow:hidden;}
@@ -28,7 +28,7 @@ svg { height:auto; }
 .svg-container path, .svg-container polygon {
     display: table-cell
 }
-.svg-container .coffeecup { fill: #000;
+.svg-container .coffeecup { fill: #ccc;
  -o-transition:.5s;
     -ms-transition:.5s;
     -moz-transition:.5s;

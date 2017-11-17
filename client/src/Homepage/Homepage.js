@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';  
+import Countdown from 'react-countdown-now';
 import { Button } from 'reactstrap'
 import openSocket from 'socket.io-client';
+import Animation from '../Coffee/Animation';
 import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
 var axios = require('axios')
@@ -13,15 +15,25 @@ var Homepage = observer(class Homepage extends Component {
     super()
     this.addCup = this.addCup.bind(this)
     this.startBrew = this.startBrew.bind(this)
+    this.endBrew = this.endBrew.bind(this)
     this.socket;
     this.state = {
-      num: 0
+      clock: false
     }
   }
 
   startBrew(){
     this.socket.emit('/startBrew')
     this.props.userStore.user.userCupcount = 0;
+    this.setState({
+      clock: true
+    })
+  }
+
+  endBrew(){
+    this.setState({
+      clock: false
+    })
   }
 
   addCup(){
@@ -63,7 +75,10 @@ var Homepage = observer(class Homepage extends Component {
   }
 
   render() {
-    if (this.props.userStore.user) {
+    const currentDate = new Date();
+    const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
+    if (this.props.userStore.user && this.state.clock == false) {
+      console.log('wahoo')
     return (
       <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
         <Button onClick={this.addCup}>Add a cup!
@@ -73,7 +88,17 @@ var Homepage = observer(class Homepage extends Component {
         <Users/>
         <Button onClick={this.startBrew}>Start Brew</Button>
       </div>
-    )} else {
+    )} else if (this.props.userStore.user && this.state.clock == true) {
+      console.log('muthafucka')
+      return (
+        <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
+          <Animation />
+          <Countdown 
+            date={Date.now() + 600000}
+            onComplete={this.endBrew}
+           />
+        </div>
+      )} else {
       return(
         <div>
           <div style={{minHeight: '300px', height: 'auto', 

@@ -29,8 +29,9 @@ var Chips = observer(class Chips extends Component {
   // }
 
   renderChip(data) {
-    console.log(data)
+    // console.log(data)
     const { classes } = this.props
+    if (data) { 
     if (data.image) {
     return (
       <div className={classes.row}>
@@ -64,29 +65,37 @@ var Chips = observer(class Chips extends Component {
           />
         </div>
       )}
+    } else {
+      return null
+    }
   }
 
   render() {
     const { classes } = this.props
+    if (this.props.userStore.user.users) {
     let userArray = this.props.userStore.user.users.slice();
+    let coffeeTotal = (this.props.userStore.user.totalCount) ? this.props.userStore.user.totalCount : 0;
     return (
       <div>
         {userArray.map(this.renderChip, this)}
         <div className={classes.row}>
           <Chip
-            avatar={<Avatar src='http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/glossy-black-icons-food-beverage/056880-glossy-black-icon-food-beverage-coffee-tea.png' />}
+            avatar={<Avatar src='/images/glossy-black-cup.png' />}
             label='Total cups:'
             className={classes.chip}
           />
           <Chip
-            avatar={<Avatar src='http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/glossy-black-icons-food-beverage/056880-glossy-black-icon-food-beverage-coffee-tea.png' />}
-            label={this.props.userStore.user.totalCount}
+            avatar={<Avatar src='/images/glossy-black-cup.png' />}
+            label={coffeeTotal}
             className={classes.chip}
           />
         </div>
       </div>
     );
+  } else {
+    <div>nada</div>
   }
+}  
 });
 
 Chips.propTypes = {

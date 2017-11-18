@@ -22,7 +22,7 @@ export default class Animation extends Component {
       document.getElementById("coffeecup").style.height = divheight * (height/100)+ "px"; 
     } 
      
-    var interval = 600; // how often to update in ms (100 times)
+    var interval = 100; // how often to update in ms (100 times)
     for (let i = 100; i >= 0; i--) {
         setTimeout( ()=> {
             // Do Something 

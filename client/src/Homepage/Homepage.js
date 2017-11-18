@@ -31,6 +31,9 @@ var Homepage = observer(class Homepage extends Component {
   }
 
   endBrew(){
+    // console.log('ending brew')
+    this.socket.emit('/endBrew');
+    
     this.setState({
       clock: false
     })
@@ -54,22 +57,29 @@ var Homepage = observer(class Homepage extends Component {
       this.socket = openSocket(socketUrl)
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
-        let sample = data
-        Array.prototype.sum = function (prop) {
-          let total = 0;
-          for (let i = 0, _len = this.length; i < _len; i++) {
-            total +=this[i][prop]
+        // console.log("postedCup+++++")
+        // console.log(this.props.userStore);
+        let sample = data;
+        if (sample) {
+          Array.prototype.sum = function (prop) {
+            let total = 0;
+            for (let i = 0, _len = this.length; i < _len; i++) {
+              total +=this[i][prop]
+            }
+            return total
           }
-          return total
-        }
-        let totalCupcount = sample.sum(`cupcount`);
-        if (this.props.userStore.user.totalCount <= 12) {
-        this.props.userStore.user.totalCount = totalCupcount;
+
+          let totalCupcount = sample.sum(`cupcount`);
+          if (this.props.userStore.user.totalCount <= 12) {
+          this.props.userStore.user.totalCount = totalCupcount;
+          } else {
+            this.props.userStore.user.totalCount = 12;
+            alert('Coffee pot at capacity!');
+          }
+          this.props.userStore.user.users = data;
         } else {
-          this.props.userStore.user.totalCount = 12;
-          alert('Coffee pot at capacity!');
+          this.props.userStore.user.users = [];
         }
-        this.props.userStore.user.users = data;
         })
     })
   }
@@ -78,25 +88,24 @@ var Homepage = observer(class Homepage extends Component {
     const currentDate = new Date();
     const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
     if (this.props.userStore.user && this.state.clock == false) {
-      console.log('wahoo')
+      // console.log('wahoo')
     return (
       <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
         <Button onClick={this.addCup}>Add a cup!
         </Button>
         <hr/>
-        People who want coffee:
+        All People who want coffee:
         <Users/>
         <Button onClick={this.startBrew}>Start Brew</Button>
       </div>
     )} else if (this.props.userStore.user && this.state.clock == true) {
-      console.log('muthafucka')
       return (
         <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
           <Loading />
           <div className='sr-only'>
           <Countdown
             style={{color: "red"}} 
-            date={Date.now() + 60000}
+            date={Date.now() + 10000}
             onComplete={this.endBrew}
            /></div>
         </div>

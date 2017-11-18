@@ -81,32 +81,53 @@ passport.deserializeUser((id, done) => {
 
   ioServer.on('connection', (client) => {
     console.log('client connected')
+
+    function getCurrentCoffee() {
+      let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
+      pool.query(query, (err, rows) => {
+        data = rows.rows;
+        ioServer.in(rows).emit('postedCup', data);
+      })
+    }
+
     client.on('coffeeConnect', (coffee) => {
       client.join(coffee);
     });
 
     client.on('/postcup', (data) => {
-      let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
-      pool.query(updateQuery, (err,rows) => { 
-        let query = `SELECT * FROM users INNER JOIN history ON users.id = history.userid`
-        pool.query(query, (err, rows) => {
-          data = rows.rows;
-          ioServer.in(rows).emit('postedCup', data);
-        })
+      let checkUserCt = `SELECT * FROM history WHERE userid = ${data.userid} AND status = 0`;
+      pool.query(checkUserCt, (err, rows)=>{
+        // if user in current brew state
+        if (rows.rowCount > 0) {
+          let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
+          pool.query(updateQuery, (err,rows) => { 
+            getCurrentCoffee();
+          })
+        } else { // user not in current brew state yet
+          let insertQuery = `INSERT INTO history (cupcount, status, userid) values (${data.cupcount}, 0, ${data.userid})`
+          pool.query(insertQuery, (err, rows) => {
+            if (err) throw err;
+            getCurrentCoffee();
+          }) 
+        }
       })
     })
 
     client.on('/startBrew', (data) => {
-      let startQuery = `UPDATE history SET cupcount = 0 WHERE id > 0`
+      let startQuery = `UPDATE history SET status = 1 WHERE status = 0`
       pool.query(startQuery, (err, rows) => {
-        let secondQuery = `SELECT * FROM users INNER JOIN history ON users.id = history.userid`
-        pool.query(secondQuery, (err, rows) => {
-          console.log(rows.rows)
-          data = rows.rows;
-          ioServer.in(rows).emit('postedCup', data);
-        })
+        getCurrentCoffee();
       })
     })
+
+    client.on('/endBrew', (data) => {
+      let startQuery = `UPDATE history SET status = 2 WHERE status = 1`;
+      pool.query(startQuery, (err, rows) => {
+        if (err) throw err;
+          ioServer.in(rows).emit('postedCup', rows.data);
+      })
+    })
+
     client.on('disconnect', ()=>{console.log("client disconnected")});
   });
 
@@ -124,7 +145,7 @@ passport.deserializeUser((id, done) => {
           let sumQuery = `select sum(cupcount) from history where status = 0;`
           pool.query(sumQuery, (err, rows) => {
             sum = rows.rows[0].sum
-            let query = `SELECT * FROM history where userid = ${user.id}`;
+            let query = `SELECT * FROM history where userid = ${user.id} and status = 0`;
             pool.query(query, (error, rows) => {
               if (error) throw error;
               if (rows.rowCount > 0) {
@@ -135,10 +156,8 @@ passport.deserializeUser((id, done) => {
               let theseUsers = {
                 cupcount: null
               }
-              let userQuery = `SELECT * FROM users INNER JOIN history ON users.id = history.userid`;
+              let userQuery = `SELECT * FROM users INNER JOIN history ON users.id = history.userid where history.status = 0`;
               pool.query(userQuery, (error, users) => {
-                console.log(userQuery)
-                console.log(users.rows)
                 if (error) throw error;
                 theseUsers = users.rows;
                 res.json({ 
@@ -221,15 +240,12 @@ const S3_BUCKET = process.env.S3_BUCKET;
 });
 
 app.post('/signup', (req, res, next) => {
-  console.log(req.body)
+  // console.log(req.body)
   let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
   pool.query(query, (err, user) => {
-    console.log(query)
-    console.log(user)
-    let insertQuery = `INSERT INTO history (cupcount, status, userid) values (0, 0, ${user.rows[0].id})`
-    pool.query(insertQuery, (err, rows) => {
-      if (err) throw err;
-    })
+    // console.log(query)
+    // console.log(user)
+    
   if (err) throw err;
     res.json(user.rows);
   });    

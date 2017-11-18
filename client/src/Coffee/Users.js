@@ -42,7 +42,7 @@ var Chips = observer(class Chips extends Component {
         />
         <Chip
           key={data.key}
-          avatar={<Avatar src='http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/glossy-black-icons-food-beverage/056880-glossy-black-icon-food-beverage-coffee-tea.png' />}
+          avatar={<Avatar src='/images/glossy-black-cup.png' />}
           label={data.cupcount}
           className={classes.chip}
         />
@@ -52,13 +52,13 @@ var Chips = observer(class Chips extends Component {
         <div className={classes.row}>
           <Chip
             key={data.key}
-            avatar={<Avatar src='http://s3.amazonaws.com/37assets/svn/765-default-avatar.png' />}
+            avatar={<Avatar src='/images/default-avatar.png' />}
             label={data.firstname}
             className={classes.chip}
           />
           <Chip
             key={data.key}
-            avatar={<Avatar src='http://cdn.mysitemyway.com/etc-mysitemyway/icons/legacy-previews/icons/glossy-black-icons-food-beverage/056880-glossy-black-icon-food-beverage-coffee-tea.png' />}
+            avatar={<Avatar src='/images/glossy-black-cup.png' />}
             label={data.cupcount}
             className={classes.chip}
           />

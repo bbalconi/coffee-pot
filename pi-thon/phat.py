@@ -18,8 +18,6 @@ socketIO = SocketIO('https://coffee-pot-pi.herokuapp.com')
 
 def on_connect():
   print 'Connected to server'
-#  socketIO.emit('Authenticating', {'key': os.environ['SOCKET_KEY']})
-#  socketIO.on('authenticated', authenticated)
   socketIO.emit('piConnected')
 
 def on_reconnect():
@@ -33,9 +31,6 @@ def on_disconnect():
 def cupToPi(data):
   print('Wahoo!')
   print data;
-
-#def authenticated(*args):
-#  print('RPI is connected to the server')
 
 def main():
   print 'yyyy tho'

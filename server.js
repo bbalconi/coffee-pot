@@ -1,4 +1,5 @@
 var express = require('express');
+var http = require('http');
 var app = require("express")();
 var server = require('http').Server(app);
 var io = require('socket.io');
@@ -9,7 +10,6 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 var passwordHash = require("password-hash");
 var cookieParser = require('cookie-parser');
-var http = require('http');
 var path  = require('path');
 const { Pool } = require('pg');
 const AWS = require('aws-sdk');
@@ -79,18 +79,36 @@ passport.deserializeUser((id, done) => {
   })
   })
 
+  var piClient = {};
+
   ioServer.on('connection', (client) => {
-    console.log('client connected')
+    console.log('client connected! id: ', client.id)
 
     function getCurrentCoffee() {
+      console.log('fuck!!!!!')
       let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
       pool.query(query, (err, rows) => {
         data = rows.rows;
-        ioServer.in(rows).emit('postedCup', data);
+        ioServer.emit('postedCup', data);
+        let totalQuery = `select sum(cupcount) from history where status = 0;`;
+        pool.query(totalQuery, (err, rows) => {
+          console.log(rows.rows[0].sum)
+          let sum = rows.rows[0].sum
+          ioServer.emit('cupToPi', sum);
+        })
       })
     }
 
+
+    client.on('piDisconnected', ()=>{
+      console.log('FUCKKKKKK')
+    });
+
+
+
     client.on('coffeeConnect', (coffee) => {
+      console.log(coffee)
+      console.log('^^^^^^^^^')
       client.join(coffee);
     });
 
@@ -243,8 +261,8 @@ app.post('/signup', (req, res, next) => {
   // console.log(req.body)
   let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
   pool.query(query, (err, user) => {
-    // console.log(query)
-    // console.log(user)
+    console.log(query)
+    console.log(user)
     
   if (err) throw err;
     res.json(user.rows);
@@ -262,6 +280,8 @@ app.get("/*", function(req, res) {
 });
 
 var port = process.env.PORT || 5000;
+console.log(port)
+console.log('PORT')
 server.listen(port, () => {
   console.log('listening on port ' + port);
 });    

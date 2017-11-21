@@ -13,7 +13,6 @@ from socketIO_client_nexus import SocketIO, LoggingNamespace
 logging.getLogger('socketIO-client').setLevel(logging.DEBUG)
 logging.basicConfig(level=logging.DEBUG)
 
-
 socketIO = SocketIO('https://coffee-pot-pi.herokuapp.com')
 
 def on_connect():

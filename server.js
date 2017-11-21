@@ -143,7 +143,7 @@ passport.deserializeUser((id, done) => {
       pool.query(startQuery, (err, rows) => {
         if (err) throw err;
           ioServer.in(rows).emit('postedCup', rows.data);
-          ioServer.in(rows).emit('cupToPi', 0);
+          ioServer.emit('cupToPi', 0);
       })
     })
 

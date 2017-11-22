@@ -56,6 +56,9 @@ var Homepage = observer(class Homepage extends Component {
       var socketUrl = res.data;
       this.socket = openSocket(socketUrl)
       this.socket.emit('coffeeConnect', res)
+      this.socket.on('message', (message) => {
+        console.log(message)
+      })
       this.socket.on('postedCup', (data) => {
         // console.log("postedCup+++++")
         // console.log(this.props.userStore);

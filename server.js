@@ -85,7 +85,6 @@ passport.deserializeUser((id, done) => {
     console.log('client connected! id: ', client.id)
 
     function getCurrentCoffee() {
-      console.log('fuck!!!!!')
       let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
       pool.query(query, (err, rows) => {
         data = rows.rows;
@@ -100,7 +99,7 @@ passport.deserializeUser((id, done) => {
     }
 
     client.on('message', (message)=>{
-      console.log(message)
+      res.json(message)
     })
 
     client.on('piDisconnected', ()=>{
@@ -110,8 +109,6 @@ passport.deserializeUser((id, done) => {
 
 
     client.on('coffeeConnect', (coffee) => {
-      console.log(coffee)
-      console.log('^^^^^^^^^')
       client.join(coffee);
     });
 

@@ -99,6 +99,9 @@ passport.deserializeUser((id, done) => {
       })
     }
 
+    client.on('message', (message)=>{
+      console.log(message)
+    })
 
     client.on('piDisconnected', ()=>{
       console.log('FUCKKKKKK')

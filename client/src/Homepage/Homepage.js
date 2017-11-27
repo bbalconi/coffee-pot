@@ -91,12 +91,17 @@ var Homepage = observer(class Homepage extends Component {
     if (this.props.userStore.user && this.state.clock == false) {
     return (
       <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
-        <Button color="primary" raised onClick={this.addCup}>Add a cup!
-        </Button>
-        <hr/>
-        All People who want coffee:
+      <Grid container>
+      <Grid item style={{width:'50%'}}>
+        
+        <p>Queued for coffee:</p>
         <Users/>
+        <Button color="primary"  onClick={this.addCup}>+ Add a cup!
+        </Button> 
+        </Grid><Grid item style={{width:'50%'}}>
         <Button color="primary" raised onClick={this.startBrew}>Start Brew</Button>
+        </Grid>
+        </Grid>
         <History/>
       </div>
     )} else if (this.props.userStore.user && this.state.clock == true) {
@@ -127,7 +132,7 @@ var Homepage = observer(class Homepage extends Component {
           <p style={{ color: '#fff', fontSize: '1.5em'}}>Solving the problem of <em>how much coffee to make</em></p>
           </div>
           </div> 
-          <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
+          <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
 
             <h2>Revolutionize your coffee process</h2>
             <p>Get your piece of the Coffee Pot "Pi"</p>

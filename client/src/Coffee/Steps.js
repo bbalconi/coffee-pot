@@ -34,7 +34,7 @@ function getStepContent(stepIndex) {
       return 'Everyone receives notice of fresh coffee!';
 
     default:
-      return 'Uknown stepIndex';
+      return '';
   }
 }
 
@@ -82,25 +82,16 @@ class HorizontalLabelPositionBelowStepper extends React.Component {
         <div>
           {this.state.activeStep === steps.length ? (
             <div>
-              <Typography className={classes.instructions}>
-                All steps completed - you&quot;re finished
-              </Typography>
-              <Button onClick={this.handleReset}>Reset</Button>
+              
             </div>
           ) : (
             <div style={{textAlign:'center'}}>
               <Typography className={classes.instructions}>{getStepContent(activeStep)}</Typography>
               <div>
-                <Button
-                  disabled={activeStep === 0}
-                  onClick={this.handleBack}
-                  className={classes.backButton}
-                >
-                  Back
-                </Button>
-                <Button raised color="primary" onClick={this.handleNext}>
-                  {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                </Button>
+                
+                  {
+                    activeStep === steps.length - 1 ? '' : <Button raised color="primary" onClick={this.handleNext}>Next</Button>
+                    }
               </div>
             </div>
           )}

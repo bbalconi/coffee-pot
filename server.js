@@ -181,6 +181,7 @@ passport.deserializeUser((id, done) => {
                   success: true, 
                   id: user.id, 
                   totalCount: sum, 
+                  image: user.image,
                   userCupcount: userCupcount, 
                   email: user.email, 
                   firstName: user.firstname, 
@@ -263,6 +264,18 @@ app.post('/signup', (req, res, next) => {
     
   if (err) throw err;
     res.json(user.rows);
+  });    
+});
+
+app.get('/history', (req, res, next) => {
+  // console.log(req.body)
+  let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 ORDER BY added_at DESC`  
+  pool.query(query, (err, users) => {
+    console.log(query)
+    console.log(users)
+    
+    if (err) throw err;
+    res.json(users.rows);
   });    
 });
 

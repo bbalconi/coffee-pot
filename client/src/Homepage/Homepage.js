@@ -7,6 +7,7 @@ import openSocket from 'socket.io-client';
 import Loading from '../Coffee/Loading';
 import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
+import History from '../Coffee/History'
 var axios = require('axios')
 
 
@@ -95,6 +96,7 @@ var Homepage = observer(class Homepage extends Component {
         All People who want coffee:
         <Users/>
         <Button onClick={this.startBrew}>Start Brew</Button>
+        <History/>
       </div>
     )} else if (this.props.userStore.user && this.state.clock == true) {
       return (
@@ -128,6 +130,7 @@ var Homepage = observer(class Homepage extends Component {
             <p>Get your piece of the Coffee Pot "Pi"</p>
             <Steps/>
           </div>
+          
         </div>
       )
     }

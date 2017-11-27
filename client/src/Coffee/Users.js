@@ -34,36 +34,20 @@ var Chips = observer(class Chips extends Component {
     if (data) { 
     if (data.image) {
     return (
-      <div className={classes.row}>
         <Chip
           key={data.key}
           avatar={<Avatar src={data.image} />}
-          label={data.firstname}
+          label={data.firstname + ': ' + data.cupcount}
           className={classes.chip}
         />
-        <Chip
-          key={data.key}
-          avatar={<Avatar src='/images/glossy-black-cup.png' />}
-          label={data.cupcount}
-          className={classes.chip}
-        />
-      </div>
     )} else {
       return (
-        <div className={classes.row}>
           <Chip
             key={data.key}
             avatar={<Avatar src='/images/default-avatar.png' />}
-            label={data.firstname}
+            label={data.firstname + ': ' + data.cupcount}
             className={classes.chip}
           />
-          <Chip
-            key={data.key}
-            avatar={<Avatar src='/images/glossy-black-cup.png' />}
-            label={data.cupcount}
-            className={classes.chip}
-          />
-        </div>
       )}
     } else {
       return null
@@ -77,18 +61,17 @@ var Chips = observer(class Chips extends Component {
     let coffeeTotal = (this.props.userStore.user.totalCount) ? this.props.userStore.user.totalCount : 0;
     return (
       <div>
+        <div className={classes.row}>
+        
         {userArray.map(this.renderChip, this)}
+        </div>
         <div className={classes.row}>
           <Chip
             avatar={<Avatar src='/images/glossy-black-cup.png' />}
-            label='Total cups:'
+            label={'Total cups: ' + coffeeTotal}
             className={classes.chip}
           />
-          <Chip
-            avatar={<Avatar src='/images/glossy-black-cup.png' />}
-            label={coffeeTotal}
-            className={classes.chip}
-          />
+         
         </div>
       </div>
     );

@@ -80,7 +80,7 @@ var Login = observer(class Login extends Component {
         <Grid>
           <Grid item>
             <p>{this.state.message}</p>
-            <Button raised primary className="login-button" onClick={() => this.handleLogin(this.state.email, this.state.password)} >Submit</Button>
+            <Button raised color="primary" className="login-button" onClick={() => this.handleLogin(this.state.email, this.state.password)} >Submit</Button>
           </Grid>
         </Grid>
       </div>

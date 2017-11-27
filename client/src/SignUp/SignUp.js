@@ -74,7 +74,7 @@ var SignUp = observer(class SignUp extends Component {
   render() {
     const userVals = ['weak', 'weak', 'okay', 'good', 'strong'];
     return (
-      <div>
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
         <Grid className="grid-example">
           <Grid item>
 
@@ -124,7 +124,7 @@ var SignUp = observer(class SignUp extends Component {
                 changeCallback={this.changeCallback}
 
                 lineDirection="center"
-
+                style={{width: 'auto'}}
                 type="Password"
                 inputProps={{ className: "md-text-field md-text-field--floating-margin md-full-width md-text", placeholder: "abc123", autoComplete: "off" }}
               />
@@ -152,7 +152,7 @@ var SignUp = observer(class SignUp extends Component {
         <Grid>
           <Grid item>
             <p>{this.state.message}</p>
-            <Button raised primary onClick={this.handleSignup}>Submit</Button>
+            <Button raised color="primary" onClick={this.handleSignup}>Submit</Button>
           </Grid>
         </Grid>
       </div>

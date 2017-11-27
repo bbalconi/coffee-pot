@@ -43,7 +43,7 @@ class App extends Component {
             <MuiThemeProvider theme={theme}>
             <Navbar />
             <Route exact path='/' render={() => <Homepage /> }/>
-              <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
+              <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
               <Route  path='/signup' render={() => <SignUp /> }/>
               <Route path='/login' render={() => <Login /> }/>
               <Route path='/logout' render={() => <Logout /> }/>

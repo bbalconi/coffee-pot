@@ -2,12 +2,14 @@ import React, { PropTypes, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';  
 import Countdown from 'react-countdown-now';
-import { Button } from 'reactstrap'
 import openSocket from 'socket.io-client';
 import Loading from '../Coffee/Loading';
 import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
-import History from '../Coffee/History'
+import History from '../Coffee/History';
+import { Grid, TextField, Button } from 'material-ui';
+
+
 var axios = require('axios')
 
 
@@ -87,20 +89,19 @@ var Homepage = observer(class Homepage extends Component {
     const currentDate = new Date();
     const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
     if (this.props.userStore.user && this.state.clock == false) {
-      // console.log('wahoo')
     return (
-      <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
-        <Button onClick={this.addCup}>Add a cup!
+      <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
+        <Button color="primary" raised onClick={this.addCup}>Add a cup!
         </Button>
         <hr/>
         All People who want coffee:
         <Users/>
-        <Button onClick={this.startBrew}>Start Brew</Button>
+        <Button color="primary" raised onClick={this.startBrew}>Start Brew</Button>
         <History/>
       </div>
     )} else if (this.props.userStore.user && this.state.clock == true) {
       return (
-        <div style={{maxWidth:'1100px', margin: '0 auto', paddingTop: '1em'}}>
+        <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
           <Loading />
           <div className='sr-only'>
           <Countdown
@@ -118,9 +119,11 @@ var Homepage = observer(class Homepage extends Component {
           backgroundPosition: 'center', 
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover', 
-          color: '#fff', position: 'relative', textAlign: 'center', padding: '1em 0'}}>
+          color: '#fff', position: 'relative', textAlign: 'center', padding: '0'}}>
           <div style={{ background: 'linear-gradient(to right, rgba(154, 132, 120, .5), rgba(30, 19, 12, .5))',  position: 'absolute', bottom: '0', top: '0', width: '100%', padding: '0 2em'    }}>
-          <h1 style={{fontSize: '3em', padding: '1em 0 0 0'}}>Coffee Pot Pi</h1>
+          <h1 style={{fontSize: '2em', padding: '0'}}>            
+            <img style={{maxWidth: 200}} alt="Coffee Pot Pi" src="/images/logo-primary.png" />
+            </h1>
           <p style={{ color: '#fff', fontSize: '1.5em'}}>Solving the problem of <em>how much coffee to make</em></p>
           </div>
           </div> 

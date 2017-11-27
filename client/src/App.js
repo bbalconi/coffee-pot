@@ -11,7 +11,8 @@ import {
 } from 'react-router-dom';
 import {Provider} from "mobx-react"
 import UserStore from "./Stores/UserStore";
-import primary from 'material-ui/colors/brown';
+import HistoryStore from './Stores/HistoryStore';
+import primary from 'material-ui/colors/teal';
 import secondary from 'material-ui/colors/blueGrey';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Loading from './Coffee/Loading';
@@ -36,7 +37,7 @@ class App extends Component {
 
   render() {
     return (
-       <Provider userStore={new UserStore()}> 
+       <Provider historyStore={new HistoryStore()} userStore={new UserStore()}> 
         <Router>
           <div>
             <MuiThemeProvider theme={theme}>

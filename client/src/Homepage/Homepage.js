@@ -85,6 +85,7 @@ var Homepage = observer(class Homepage extends Component {
         }
         })
         this.socket.on('brewBlaster', (data) => {
+          console.log('HI GUYS')
           this.setState({
             clock: true
           })

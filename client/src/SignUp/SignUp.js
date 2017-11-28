@@ -94,7 +94,6 @@ var SignUp = observer(class SignUp extends Component {
 
   render() {
     const userVals = ['Weak', 'Weak', 'Okay', 'Good', 'Strong'];
-    
     let passMsg = (this.state.password.length > 0 && zxcvbn(this.state.password).feedback.suggestions[0]) ?  ' - ' + zxcvbn(this.state.password).feedback.suggestions[0] : '';
     let errorCode = ((this.state.password.length > 0) && ((zxcvbn(this.state.password)).score) < 2) ? true : false; 
     let emailError = (this.state.email.length === 0 || !(this.state.emailInvalid)) ? '' : 'Email is invalid';

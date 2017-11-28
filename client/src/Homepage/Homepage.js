@@ -62,6 +62,12 @@ var Homepage = observer(class Homepage extends Component {
       this.socket = openSocket(socketUrl)
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
+        console.log(data)
+        if (data.length == 0) {
+          this.setState({
+            clock: true
+          })
+        }
         let sample = data;
         if (sample) {
           Array.prototype.sum = function (prop) {
@@ -71,7 +77,6 @@ var Homepage = observer(class Homepage extends Component {
             }
             return total
           }
-
           let totalCupcount = sample.sum(`cupcount`);
           if (this.props.userStore.user.totalCount <= 12) {
           this.props.userStore.user.totalCount = totalCupcount;
@@ -84,33 +89,33 @@ var Homepage = observer(class Homepage extends Component {
           this.props.userStore.user.users = [];
         }
         })
-        this.socket.on('brewBlaster', (data) => {
-          console.log('HI GUYS')
-          this.setState({
-            clock: true
-          })
-          let sample = data;
-          if (sample) {
-            Array.prototype.sum = function (prop) {
-              let total = 0;
-              for (let i = 0, _len = this.length; i < _len; i++) {
-                total +=this[i][prop]
-              }
-              return total
-            }
+        // this.socket.on('brewBlaster', (data) => {
+        //   console.log('HI GUYS')
+        //   this.setState({
+        //     clock: true
+        //   })
+        //   let sample = data;
+        //   if (sample) {
+        //     Array.prototype.sum = function (prop) {
+        //       let total = 0;
+        //       for (let i = 0, _len = this.length; i < _len; i++) {
+        //         total +=this[i][prop]
+        //       }
+        //       return total
+        //     }
   
-            let totalCupcount = sample.sum(`cupcount`);
-            if (this.props.userStore.user.totalCount <= 12) {
-            this.props.userStore.user.totalCount = totalCupcount;
-            } else {
-              this.props.userStore.user.totalCount = 12;
-              alert('Coffee pot at capacity!');
-            }
-            this.props.userStore.user.users = data;
-          } else {
-            this.props.userStore.user.users = [];
-          }
-          })
+        //     let totalCupcount = sample.sum(`cupcount`);
+        //     if (this.props.userStore.user.totalCount <= 12) {
+        //     this.props.userStore.user.totalCount = totalCupcount;
+        //     } else {
+        //       this.props.userStore.user.totalCount = 12;
+        //       alert('Coffee pot at capacity!');
+        //     }
+        //     this.props.userStore.user.users = data;
+        //   } else {
+        //     this.props.userStore.user.users = [];
+        //   }
+        //   })
   })
 }
 

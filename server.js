@@ -79,8 +79,6 @@ passport.deserializeUser((id, done) => {
   })
   })
 
-  var piClient = {};
-
   ioServer.on('connection', (client) => {
     console.log('client connected! id: ', client.id)
 
@@ -98,19 +96,19 @@ passport.deserializeUser((id, done) => {
       })
     }
 
-    function brewBlaster() {
-      console.log('push push push push')
-      let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
-      pool.query(query, (err, rows) => {
-        data = rows.rows;
-        ioServer.emit('brewBlaster', data);
-        let totalQuery = `select sum(cupcount) from history where status = 0;`;
-        pool.query(totalQuery, (err, rows) => {
-          let sum = rows.rows[0].sum
-          ioServer.emit('cupToPi', sum);
-        })
-      })
-    }
+    // function brewBlaster() {
+    //   console.log('push push push push')
+    //   let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
+    //   pool.query(query, (err, rows) => {
+    //     data = rows.rows;
+    //     ioServer.emit('brewBlaster', data);
+    //     let totalQuery = `select sum(cupcount) from history where status = 0;`;
+    //     pool.query(totalQuery, (err, rows) => {
+    //       let sum = rows.rows[0].sum
+    //       ioServer.emit('cupToPi', sum);
+    //     })
+    //   })
+    // }
 
     client.on('piDisconnected', ()=>{
       console.log(':)')
@@ -144,7 +142,7 @@ passport.deserializeUser((id, done) => {
     client.on('/startBrew', (data) => {
       let startQuery = `UPDATE history SET status = 1 WHERE status = 0`
       pool.query(startQuery, (err, rows) => {
-        brewBlaster();
+        getCurrentCoffee();
       })
     })
 

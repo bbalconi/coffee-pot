@@ -284,6 +284,12 @@ app.get('/history', (req, res, next) => {
   // console.log(req.body)
   let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 ORDER BY added_at DESC`  
   pool.query(query, (err, users) => {
+<<<<<<< HEAD
+=======
+    // console.log(query)
+    // console.log(users)
+    
+>>>>>>> b15466a94575b0a49bbac6c968ae722b112d7e6f
     if (err) throw err;
     res.json(users.rows);
   });    

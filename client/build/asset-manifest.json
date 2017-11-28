@@ -1,7 +1,14 @@
 {
+<<<<<<< HEAD
   "main.css": "static/css/main.d1f4fb96.css",
   "main.css.map": "static/css/main.d1f4fb96.css.map",
   "main.js": "static/js/main.fdac3147.js",
   "main.js.map": "static/js/main.fdac3147.js.map",
+=======
+  "main.css": "static/css/main.ef80b109.css",
+  "main.css.map": "static/css/main.ef80b109.css.map",
+  "main.js": "static/js/main.5c3eeab5.js",
+  "main.js.map": "static/js/main.5c3eeab5.js.map",
+>>>>>>> b15466a94575b0a49bbac6c968ae722b112d7e6f
   "static/media/coffee-cup.svg": "static/media/coffee-cup.5c9c9ff8.svg"
 }

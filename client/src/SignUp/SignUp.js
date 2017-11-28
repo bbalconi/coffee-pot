@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import ReactPasswordStrength from 'react-password-strength';
+// import ReactPasswordStrength from 'react-password-strength';
 import { Grid, TextField, Button } from 'material-ui';
 import './SignUp.css';
 import UploadImage from '../Upload/Image';
-
 import { inject, observer } from 'mobx-react';
+import validator from 'validator';
+var zxcvbn = require('zxcvbn');
+
 
 var SignUp = observer(class SignUp extends Component {
   constructor() {
@@ -14,7 +16,7 @@ var SignUp = observer(class SignUp extends Component {
     this.inputfirstNameChange = this.inputfirstNameChange.bind(this);
     this.inputlastNameChange = this.inputlastNameChange.bind(this);
     this.inputemailChange = this.inputemailChange.bind(this);
-    this.changeCallback = this.changeCallback.bind(this);
+    this.inputPassword = this.inputPassword.bind(this);
     this.confirmPassword = this.confirmPassword.bind(this);
     this._handleKeyPress = this._handleKeyPress.bind(this);
     this.state = {
@@ -24,13 +26,14 @@ var SignUp = observer(class SignUp extends Component {
       password: '',
       confirmPassword: '',
       message: '',
+      emailInvalid: false,
       success: false
     }
   }
 
   handleSignup() {
-    console.log(this.props.userStore)
-    if (this.state.password === this.state.confirmPassword) {
+    if (this.state.firstName && this.state.lastName && this.state.email && this.state.password) {
+      if (this.state.password && (this.state.password === this.state.confirmPassword)) {
       return new Promise((resolve, reject) => {
         this.props.userStore.submitSignup({
           firstName: this.state.firstName,
@@ -39,12 +42,20 @@ var SignUp = observer(class SignUp extends Component {
           password: this.state.password,
           image: this.props.userStore.imageurl
         }).then(() => {
-          console.log(this.props.userStore.user)
           if (this.props.userStore.user != null) {
             this.props.history.push("/login");
           }
           resolve();
         })
+        })
+      } else {
+        this.setState({
+          message: "Passwords do not match"
+        })
+      }
+    } else {
+      this.setState({
+        message: "All fields are required"
       })
     }
   }
@@ -56,10 +67,20 @@ var SignUp = observer(class SignUp extends Component {
     this.setState({ lastName: e.target.value });
   }
   inputemailChange(e) {
-    this.setState({ email: e.target.value });
+    if (validator.isEmail(e.target.value)) {
+      this.setState({ 
+        email: e.target.value,
+        emailInvalid: false
+      });
+    } else {
+      this.setState({
+        email: e.target.value,        
+        emailInvalid: true
+      })
+    }
   }
-  changeCallback(event) {
-    this.setState({ password: event.password });
+  inputPassword(e) {
+    this.setState({ password: e.target.value });
   }
   confirmPassword(e) {
     this.setState({ confirmPassword: e.target.value });
@@ -72,13 +93,18 @@ var SignUp = observer(class SignUp extends Component {
   }
 
   render() {
-    const userVals = ['weak', 'weak', 'okay', 'good', 'strong'];
+    const userVals = ['Weak', 'Weak', 'Okay', 'Good', 'Strong'];
+    
+    let passMsg = (this.state.password.length > 0 && zxcvbn(this.state.password).feedback.suggestions[0]) ?  ' - ' + zxcvbn(this.state.password).feedback.suggestions[0] : '';
+    let errorCode = ((this.state.password.length > 0) && ((zxcvbn(this.state.password)).score) < 2) ? true : false; 
+    let emailError = (this.state.email.length === 0 || !(this.state.emailInvalid)) ? '' : 'Email is invalid';
     return (
       <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
         <Grid className="grid-example">
           <Grid item>
 
             <TextField
+              required={true}
               id="firstName"
               label="First Name"
               lineDirection="center"
@@ -87,53 +113,55 @@ var SignUp = observer(class SignUp extends Component {
               value={this.state.firstName}
               name="firstName"
             /></Grid>
+          
           <Grid item>
-
             <TextField
+              required={true}
               id="lastName"
               label="Last Name"
               lineDirection="center"
               placeholder="Smith"
-
               onChange={this.inputlastNameChange}
               value={this.state.lastName}
               name="lastName"
             />
-
           </Grid>
 
           <Grid item>
-
             <TextField
+              required={true}
+              error={this.state.emailInvalid}
               id="email"
               label="Email"
+              helperText={emailError}
               lineDirection="center"
               placeholder="you@something.com"
               onChange={this.inputemailChange}
               value={this.state.email}
               name="email"
             />
-
           </Grid>
-          <Grid item>
-
-
-            <div className="md-text-field-container md-full-width md-text-field-container--input"><label for="password" className="md-floating-label md-floating-label--inactive md-floating-label--inactive-sized md-text--secondary">Password</label>
-              <ReactPasswordStrength
-                value={this.state.password}
-                changeCallback={this.changeCallback}
-
-                lineDirection="center"
-                style={{width: 'auto'}}
-                type="Password"
-                inputProps={{ className: "md-text-field md-text-field--floating-margin md-full-width md-text", placeholder: "abc123", autoComplete: "off" }}
-              />
-              <hr className="no-margin-top md-divider md-divider--text-field md-divider--expand-from-center" /></div>
-
-
-          </Grid>
+          
           <Grid item>
             <TextField
+              required={true}
+              id="password"
+              label="Password"
+              lineDirection="center"
+              placeholder="abc123"
+              onChange={this.inputPassword}
+              error={errorCode}
+              value={this.state.password}
+              helperText={ userVals[zxcvbn(this.state.password).score] + passMsg }
+              name="password"
+              type="password"
+              onKeyPress={this._handleKeyPress}
+            />
+          </Grid>
+
+          <Grid item>
+            <TextField
+              required={true}
               id="password"
               label="Confirm Password"
               lineDirection="center"
@@ -144,7 +172,6 @@ var SignUp = observer(class SignUp extends Component {
               type="password"
               onKeyPress={this._handleKeyPress}
             /></Grid>
-
         </Grid>
 
         <UploadImage />

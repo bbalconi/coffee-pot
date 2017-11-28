@@ -27,6 +27,8 @@ var Homepage = observer(class Homepage extends Component {
 
   startBrew(){
     this.socket.emit('/startBrew')
+    this.props.userStore.notifyMe("Brewing started");
+    
     this.props.userStore.user.userCupcount = 0;
     this.setState({
       clock: true
@@ -36,6 +38,7 @@ var Homepage = observer(class Homepage extends Component {
   endBrew(){
     // console.log('ending brew')
     this.socket.emit('/endBrew');
+    this.props.userStore.notifyMe("Fresh coffee now available!");
     
     this.setState({
       clock: false
@@ -87,6 +90,7 @@ var Homepage = observer(class Homepage extends Component {
 
   render() {
     const currentDate = new Date();
+
     const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
     if (this.props.userStore.user && this.state.clock == false) {
     return (

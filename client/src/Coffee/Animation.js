@@ -18,7 +18,6 @@ export default class Animation extends Component {
     var divheight = document.getElementById('underlay').clientHeight;
     function updateHeight(i) {
       var height = i; 
-     console.log(height);                    
       document.getElementById("coffeecup").style.height = divheight * (height/100)+ "px"; 
     } 
      

@@ -28,11 +28,10 @@ var Homepage = observer(class Homepage extends Component {
   startBrew(){
     this.socket.emit('/startBrew')
     this.props.userStore.notifyMe("Brewing started");
-    
     this.props.userStore.user.userCupcount = 0;
-    this.setState({
-      clock: true
-    })
+    // this.setState({
+    //   clock: true
+    // })
   }
 
   endBrew(){
@@ -85,19 +84,43 @@ var Homepage = observer(class Homepage extends Component {
           this.props.userStore.user.users = [];
         }
         })
-    })
-  }
+        this.socket.on('brewBlaster', (data) => {
+          this.setState({
+            clock: true
+          })
+          let sample = data;
+          if (sample) {
+            Array.prototype.sum = function (prop) {
+              let total = 0;
+              for (let i = 0, _len = this.length; i < _len; i++) {
+                total +=this[i][prop]
+              }
+              return total
+            }
+  
+            let totalCupcount = sample.sum(`cupcount`);
+            if (this.props.userStore.user.totalCount <= 12) {
+            this.props.userStore.user.totalCount = totalCupcount;
+            } else {
+              this.props.userStore.user.totalCount = 12;
+              alert('Coffee pot at capacity!');
+            }
+            this.props.userStore.user.users = data;
+          } else {
+            this.props.userStore.user.users = [];
+          }
+          })
+  })
+}
 
   render() {
     const currentDate = new Date();
-
     const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
     if (this.props.userStore.user && this.state.clock == false) {
     return (
       <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
       <Grid container>
       <Grid item style={{width:'50%'}}>
-        
         <p>Queued for coffee:</p>
         <Users/>
         <Button color="primary"  onClick={this.addCup}>+ Add a cup!

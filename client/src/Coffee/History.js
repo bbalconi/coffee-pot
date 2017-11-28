@@ -8,7 +8,6 @@ var History = observer(class History extends Component {
   render() {
     let history = this.props.historyStore.retrieveUsers();
    
-    console.log(this.props)
     return (
       <div>
         <hr/>

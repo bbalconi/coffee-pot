@@ -85,13 +85,27 @@ passport.deserializeUser((id, done) => {
     console.log('client connected! id: ', client.id)
 
     function getCurrentCoffee() {
+      console.log('FIRED FIRED FIRED')
       let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
       pool.query(query, (err, rows) => {
         data = rows.rows;
         ioServer.emit('postedCup', data);
         let totalQuery = `select sum(cupcount) from history where status = 0;`;
         pool.query(totalQuery, (err, rows) => {
-          console.log(rows.rows[0].sum)
+          let sum = rows.rows[0].sum
+          ioServer.emit('cupToPi', sum);
+        })
+      })
+    }
+
+    function brewBlaster() {
+      console.log('push push push push')
+      let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
+      pool.query(query, (err, rows) => {
+        data = rows.rows;
+        ioServer.emit('brewBlaster', data);
+        let totalQuery = `select sum(cupcount) from history where status = 0;`;
+        pool.query(totalQuery, (err, rows) => {
           let sum = rows.rows[0].sum
           ioServer.emit('cupToPi', sum);
         })
@@ -99,7 +113,7 @@ passport.deserializeUser((id, done) => {
     }
 
     client.on('piDisconnected', ()=>{
-      console.log('FUCKKKKKK')
+      console.log(':)')
     });
 
 
@@ -130,7 +144,7 @@ passport.deserializeUser((id, done) => {
     client.on('/startBrew', (data) => {
       let startQuery = `UPDATE history SET status = 1 WHERE status = 0`
       pool.query(startQuery, (err, rows) => {
-        getCurrentCoffee();
+        brewBlaster();
       })
     })
 
@@ -250,7 +264,7 @@ const S3_BUCKET = process.env.S3_BUCKET;
       res.end();
     });
   } else {
-    console.log('invalid file type')
+
     res.end();
   }
 });
@@ -259,8 +273,7 @@ app.post('/signup', (req, res, next) => {
   // console.log(req.body)
   let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
   pool.query(query, (err, user) => {
-    console.log(query)
-    console.log(user)
+
     
   if (err) throw err;
     res.json(user.rows);
@@ -271,9 +284,6 @@ app.get('/history', (req, res, next) => {
   // console.log(req.body)
   let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 ORDER BY added_at DESC`  
   pool.query(query, (err, users) => {
-    console.log(query)
-    console.log(users)
-    
     if (err) throw err;
     res.json(users.rows);
   });    

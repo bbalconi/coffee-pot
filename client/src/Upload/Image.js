@@ -81,7 +81,6 @@ var Image = observer(class Image extends Component {
                 type="file" 
                 id="file-input" 
                 name="file-input"
-                label="Please select a file"
                 lineDirection="center"
               />
           </Grid>

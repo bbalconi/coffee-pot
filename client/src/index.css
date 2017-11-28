@@ -7,3 +7,10 @@ body {
 .Navbar-root-1 a {
   text-decoration: none;
 }
+.grid-example > div {
+  margin-bottom: .7rem;
+}
+.grid-example { 
+  margin-bottom: 1.5rem;
+}
+img#preview { border: 1px solid #ccc; padding:3px;}

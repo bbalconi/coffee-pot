@@ -22,7 +22,8 @@
     "react-password-strength": "^2.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
-    "socket.io-client": "^2.0.4"
+    "socket.io-client": "^2.0.4",
+    "zxcvbn": "^4.4.2"
   },
   "scripts": {
     "start": "react-scripts start",

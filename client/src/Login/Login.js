@@ -51,7 +51,8 @@ var Login = observer(class Login extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="form">
+      <h1>Login</h1>
         <Grid className="grid-example">
         <Grid item>
             <TextField
@@ -80,7 +81,7 @@ var Login = observer(class Login extends Component {
         <Grid>
           <Grid item>
             <p>{this.state.message}</p>
-            <Button raised color="primary" className="login-button" onClick={() => this.handleLogin(this.state.email, this.state.password)} >Submit</Button>
+            <Button raised color="primary" className="login-button" onClick={() => this.handleLogin(this.state.email, this.state.password)} >Login</Button>
           </Grid>
         </Grid>
       </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { Grid, TextField, Button } from 'material-ui';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 var Login = observer(class Login extends Component {
@@ -53,6 +53,7 @@ var Login = observer(class Login extends Component {
     return (
       <div className="form">
       <h1>Login</h1>
+
         <Grid className="grid-example">
         <Grid item>
             <TextField
@@ -84,6 +85,8 @@ var Login = observer(class Login extends Component {
             <Button raised color="primary" className="login-button" onClick={() => this.handleLogin(this.state.email, this.state.password)} >Login</Button>
           </Grid>
         </Grid>
+      <p className="subtext">New?  <Link to="/signup">Sign up for an account</Link></p>
+        
       </div>
     );
   };

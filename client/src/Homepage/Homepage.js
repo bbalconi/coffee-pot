@@ -7,6 +7,7 @@ import Loading from '../Coffee/Loading';
 import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
 import History from '../Coffee/History';
+import Feature1 from './Feature1'
 import { Grid, TextField, Button } from 'material-ui';
 
 
@@ -142,7 +143,7 @@ var Homepage = observer(class Homepage extends Component {
             <p>Get your piece of the Coffee Pot "Pi"</p>
             <Steps/>
           </div>
-          
+          <Feature1/>
         </div>
       )
     }

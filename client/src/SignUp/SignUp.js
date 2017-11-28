@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 // import ReactPasswordStrength from 'react-password-strength';
 import { Grid, TextField, Button } from 'material-ui';
 import './SignUp.css';
@@ -183,6 +183,8 @@ var SignUp = observer(class SignUp extends Component {
             <Button raised color="primary" onClick={this.handleSignup}>Signup</Button>
           </Grid>
         </Grid>
+      <p className="subtext">Already have an account? <Link to="/login">Sign In</Link></p>
+        
       </div>
     );
 

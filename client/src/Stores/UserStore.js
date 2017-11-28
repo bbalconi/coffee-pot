@@ -18,6 +18,7 @@ export default class UserStore {
 
     if (Notification.permission !== "granted") {
         Notification.requestPermission().then(function(result) {
+          Notification.permission = result;
       });
     }
   };

@@ -16,7 +16,8 @@ import primary from 'material-ui/colors/teal';
 import secondary from 'material-ui/colors/blueGrey';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Loading from './Coffee/Loading';
- 
+import Footer from './Footer/Footer';
+
 const theme = createMuiTheme({
   palette: {
     primary: primary,
@@ -41,16 +42,22 @@ class App extends Component {
         <Router>
           <div>
             <MuiThemeProvider theme={theme}>
-            <Navbar />
-            <Route exact path='/' render={() => <Homepage /> }/>
-              <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
-              <Route  path='/signup' render={() => <SignUp /> }/>
-              <Route path='/login' render={() => <Login /> }/>
-              <Route path='/logout' render={() => <Logout /> }/>
-              <Route path='/loading' render={() => <Loading /> }/>
+            <div style={{display: 'flex', minHeight: '100vh', flexDirection: 'column'}}>
+              <Navbar />
+              <div  style={{flex: 1}}>
+                <Route exact path='/' render={() => <Homepage /> }/>
+                  <div style={{maxWidth:'1100px', margin: '0 auto', padding: '0 1em'}}>
+                  <Route  path='/signup' render={() => <SignUp /> }/>
+                  <Route path='/login' render={() => <Login /> }/> 
+                  <Route path='/logout' render={() => <Logout /> }/>
+                  <Route path='/loading' render={() => <Loading /> }/>
+                  </div>
+                </div>
+                <Footer /> 
               </div>
             </MuiThemeProvider>
           </div>
+          
         </Router>
       </Provider>
     );

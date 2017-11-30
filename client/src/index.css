@@ -4,7 +4,7 @@ body {
   font-family: sans-serif;
   font-family:'Roboto','Helvetica','Arial',sans-serif!important; 
 }
-.Navbar-root-1 a {
+header a {
   text-decoration: none;
 }
 .grid-example > div {

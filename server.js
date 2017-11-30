@@ -279,8 +279,15 @@ app.post('/signup', (req, res, next) => {
 });
 
 app.get('/history', (req, res, next) => {
-  // console.log(req.body)
-  let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 ORDER BY added_at DESC`  
+  let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 AND DATE_PART('day', NOW() - added_at) < 1 ORDER BY added_at DESC`  
+  pool.query(query, (err, users) => {
+    if (err) throw err;
+    res.json(users.rows);
+  });    
+});
+
+app.post('/history', (req, res, next) => {
+  let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 AND users.id = ${req.body.userid} ORDER BY added_at DESC`  
   pool.query(query, (err, users) => {
     if (err) throw err;
     res.json(users.rows);

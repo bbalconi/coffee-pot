@@ -12,10 +12,7 @@ export default class UserStore {
       get retrieveUser() {
         return this.user
       }
-
-      
     });
-
     if (Notification.permission !== "granted") {
         Notification.requestPermission().then(function(result) {
           Notification.permission = result;

@@ -85,12 +85,14 @@ var Homepage = observer(class Homepage extends Component {
           this.props.userStore.user.users = [];
         }
         })
+      this.socket.on('endBrew', (data) => {
+        this.props.userStore.lastbrew = data;
+      })
   })
 }
 
   render() {
-    const currentDate = new Date();
-    const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
+
     if (this.props.userStore.user && this.state.clock == false) {
     return (
       <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
@@ -104,7 +106,7 @@ var Homepage = observer(class Homepage extends Component {
         <Button color="primary" raised onClick={this.startBrew}>Start Brew</Button>
         </Grid>
         </Grid>
-        <History/>
+        {/* <History/> */}
       </div>
     )} else if (this.props.userStore.user && this.state.clock == true) {
       return (

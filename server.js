@@ -151,9 +151,6 @@ passport.deserializeUser((id, done) => {
       let startQuery = `UPDATE history SET status = 2 WHERE status = 1`;
       pool.query(startQuery, (err, rows) => {
         if (err) throw err;
-        console.log(rows.rows)
-        console.log('motherfucker')
-          ioServer.in(rows).emit('postedCup', ['']);
           ioServer.emit('cupToPi', 0);
       })
     })

@@ -33,7 +33,6 @@
     "pg": "^7.4.0",
     "react-countdown": "^2.0.0",
     "react-md": "^1.2.8",
-    "socket.io": "^2.0.4",
-    "validator": "^9.1.2"
+    "socket.io": "^2.0.4"
   }
 }

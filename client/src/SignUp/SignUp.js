@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 // import ReactPasswordStrength from 'react-password-strength';
 import { Grid, TextField, Button } from 'material-ui';
 import './SignUp.css';
@@ -98,7 +98,8 @@ var SignUp = observer(class SignUp extends Component {
     let errorCode = ((this.state.password.length > 0) && ((zxcvbn(this.state.password)).score) < 2) ? true : false; 
     let emailError = (this.state.email.length === 0 || !(this.state.emailInvalid)) ? '' : 'Email is invalid';
     return (
-      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+      <div className="form" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+      <h1>Sign Up</h1>
         <Grid className="grid-example">
           <Grid item>
 
@@ -178,9 +179,11 @@ var SignUp = observer(class SignUp extends Component {
         <Grid>
           <Grid item>
             <p>{this.state.message}</p>
-            <Button raised color="primary" onClick={this.handleSignup}>Submit</Button>
+            <Button raised color="primary" onClick={this.handleSignup}>Signup</Button>
           </Grid>
         </Grid>
+      <p className="subtext">Already have an account? <Link to="/login">Sign In</Link></p>
+        
       </div>
     );
 

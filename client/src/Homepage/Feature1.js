@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Grid, TextField, Button } from 'material-ui';
-import { withRouter, Link } from 'react-router-dom';
+import { Button } from 'material-ui';
+import { Link } from 'react-router-dom';
 
 
 export default class Feature1 extends Component {

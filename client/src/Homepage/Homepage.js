@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';  
 import Countdown from 'react-countdown-now';
@@ -8,7 +8,7 @@ import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
 import History from '../Coffee/History';
 import Feature1 from './Feature1'
-import { Grid, TextField, Button } from 'material-ui';
+import { Grid, Button } from 'material-ui';
 
 
 var axios = require('axios')

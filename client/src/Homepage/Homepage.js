@@ -29,13 +29,9 @@ var Homepage = observer(class Homepage extends Component {
     this.socket.emit('/startBrew')
     this.props.userStore.notifyMe("Brewing started");
     this.props.userStore.user.userCupcount = 0;
-    // this.setState({
-    //   clock: true
-    // })
   }
 
   endBrew(){
-    // console.log('ending brew')
     this.socket.emit('/endBrew');
     this.props.userStore.notifyMe("Fresh coffee now available!");
     
@@ -89,33 +85,6 @@ var Homepage = observer(class Homepage extends Component {
           this.props.userStore.user.users = [];
         }
         })
-        // this.socket.on('brewBlaster', (data) => {
-        //   console.log('HI GUYS')
-        //   this.setState({
-        //     clock: true
-        //   })
-        //   let sample = data;
-        //   if (sample) {
-        //     Array.prototype.sum = function (prop) {
-        //       let total = 0;
-        //       for (let i = 0, _len = this.length; i < _len; i++) {
-        //         total +=this[i][prop]
-        //       }
-        //       return total
-        //     }
-  
-        //     let totalCupcount = sample.sum(`cupcount`);
-        //     if (this.props.userStore.user.totalCount <= 12) {
-        //     this.props.userStore.user.totalCount = totalCupcount;
-        //     } else {
-        //       this.props.userStore.user.totalCount = 12;
-        //       alert('Coffee pot at capacity!');
-        //     }
-        //     this.props.userStore.user.users = data;
-        //   } else {
-        //     this.props.userStore.user.users = [];
-        //   }
-        //   })
   })
 }
 
@@ -170,8 +139,7 @@ var Homepage = observer(class Homepage extends Component {
             <h2>Revolutionize your coffee process</h2>
             <p>Get your piece of the Coffee Pot "Pi"</p>
             <Steps/>
-          </div>
-          
+          </div>  
         </div>
       )
     }

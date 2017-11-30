@@ -83,9 +83,10 @@ passport.deserializeUser((id, done) => {
     console.log('client connected! id: ', client.id)
 
     function getCurrentCoffee() {
-      console.log('FIRED FIRED FIRED')
       let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
       pool.query(query, (err, rows) => {
+        console.log(rows.rows)
+        console.log('cocksucker')
         data = rows.rows;
         ioServer.emit('postedCup', data);
         let totalQuery = `select sum(cupcount) from history where status = 0;`;
@@ -150,7 +151,9 @@ passport.deserializeUser((id, done) => {
       let startQuery = `UPDATE history SET status = 2 WHERE status = 1`;
       pool.query(startQuery, (err, rows) => {
         if (err) throw err;
-          ioServer.in(rows).emit('postedCup', rows.data);
+        console.log(rows.rows)
+        console.log('motherfucker')
+          ioServer.in(rows).emit('postedCup', ['']);
           ioServer.emit('cupToPi', 0);
       })
     })

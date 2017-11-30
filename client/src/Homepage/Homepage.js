@@ -93,7 +93,7 @@ var Homepage = observer(class Homepage extends Component {
     const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
     if (this.props.userStore.user && this.state.clock == false) {
     return (
-      <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
+      <div className="container">
       <Grid container>
       <Grid item style={{width:'50%'}}>
         <p>Queued for coffee:</p>
@@ -108,7 +108,7 @@ var Homepage = observer(class Homepage extends Component {
       </div>
     )} else if (this.props.userStore.user && this.state.clock == true) {
       return (
-        <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
+        <div className="container">
           <Loading />
           <div className='sr-only'>
           <Countdown
@@ -134,7 +134,7 @@ var Homepage = observer(class Homepage extends Component {
           <p style={{ color: '#fff', fontSize: '1.5em', fontWeight: 300}}>Get your piece of the Coffee Pot "Pi"</p>
           </div>
           </div> 
-          <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1.5em'}}>
+          <div className="container">
 
             <h2>Revolutionize your coffee process</h2>
             <Steps/>

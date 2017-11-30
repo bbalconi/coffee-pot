@@ -49,7 +49,7 @@ var Navbar = observer(class Navbar extends Component {
     return (
       <div className={classes.root} style={{ marginTop: '0' }}>
         <AppBar position="static">
-          <Toolbar> 
+          <Toolbar > 
             <Avatar alt="Coffee Pot Pi" src="/images/logo-inverted.png" className={classes.avatar, classes.bigAvatar} />
             <Typography type="title" className={classes.flex}>
               <Link style={{ color: '#fff' }} color="contrast" to="/">Coffee Pot Pi</Link>
@@ -57,7 +57,7 @@ var Navbar = observer(class Navbar extends Component {
             {entryLinks}
           </Toolbar>
         </AppBar>
-      </div>
+          </div>
     );
   }
 });

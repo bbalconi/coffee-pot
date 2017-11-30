@@ -36,9 +36,9 @@ var SignUp = observer(class SignUp extends Component {
       if (this.state.password && (this.state.password === this.state.confirmPassword)) {
       return new Promise((resolve, reject) => {
         this.props.userStore.submitSignup({
-          firstName: this.state.firstName,
-          lastName: this.state.lastName,
-          email: this.state.email,
+          firstName: validator.escape(this.state.firstName),
+          lastName: validator.escape(this.state.lastName),
+          email: validator.escape(this.state.email),
           password: this.state.password,
           image: this.props.userStore.imageurl
         }).then(() => {
@@ -61,7 +61,7 @@ var SignUp = observer(class SignUp extends Component {
   }
   // change these to one function
   inputfirstNameChange(e) {
-    this.setState({ firstName: e.target.value });
+    this.setState({ firstName: (e.target.value) });
   }
   inputlastNameChange(e) {
     this.setState({ lastName: e.target.value });

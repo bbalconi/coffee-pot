@@ -90,23 +90,28 @@ var Homepage = observer(class Homepage extends Component {
 
   render() {
     const currentDate = new Date();
+    
     const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
     if (this.props.userStore.user && this.state.clock == false) {
-    return (
-      <div className="container">
-      <Grid container>
-      <Grid item style={{width:'50%'}}>
-        <p>Queued for coffee:</p>
-        <Users/>
-        <Button color="primary"  onClick={this.addCup}>+ Add a cup!
-        </Button> 
-        </Grid><Grid item style={{width:'50%'}}>
-        <Button color="primary" raised onClick={this.startBrew}>Start Brew</Button>
-        </Grid>
-        </Grid>
-        <History/>
-      </div>
-    )} else if (this.props.userStore.user && this.state.clock == true) {
+      let disableBrewStatus = (this.props.userStore.user.totalCount) ? false : true;
+      let disableAddStatus = (this.props.userStore.user.totalCount === 12) ? true : false;
+      
+      return (
+        <div className="container">
+        <Grid container>
+        <Grid item style={{width:'50%'}}>
+          <p>Queued for coffee:</p>
+          <Users/>
+          <Button color="primary" disabled={disableAddStatus} onClick={this.addCup}>+ Add a cup!
+          </Button> 
+          </Grid><Grid item style={{width:'50%'}}>
+          <Button color="primary" disabled={disableBrewStatus} raised onClick={this.startBrew}>Start Brew</Button>
+          </Grid>
+          </Grid>
+          <History/>
+        </div>
+      )
+    } else if (this.props.userStore.user && this.state.clock == true) {
       return (
         <div className="container">
           <Loading />

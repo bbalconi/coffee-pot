@@ -16,6 +16,7 @@ import primary from 'material-ui/colors/teal';
 import secondary from 'material-ui/colors/blueGrey';
 import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Loading from './Coffee/Loading';
+import UserHistory from './Coffee/UserHistory';
 import Footer from './Footer/Footer';
 
 const theme = createMuiTheme({
@@ -51,6 +52,7 @@ class App extends Component {
                   <Route path='/login' render={() => <Login /> }/> 
                   <Route path='/logout' render={() => <Logout /> }/>
                   <Route path='/loading' render={() => <Loading /> }/>
+                  <Route path='/profile' render={() => <UserHistory /> }/>
                   </div>
                 </div>
                 <Footer /> 

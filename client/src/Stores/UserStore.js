@@ -43,7 +43,7 @@ export default class UserStore {
       }).then((res, err) => {
         if (err) throw err;
         if (res.data.success) {
-          console.log(res.data)
+          // console.log(res.data)
           this.user = res.data
           resolve(res.data);
         } else {
@@ -57,7 +57,7 @@ export default class UserStore {
  
   logout() {
     axios.get('/logout').then((res)=> {
-      console.log(res);
+      // console.log(res);
       if (res !== undefined) { 
         this.user = null;  
         sessionStorage.removeItem('user');

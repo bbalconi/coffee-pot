@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, TextField, Button } from 'material-ui';
+import { Grid, TextField } from 'material-ui';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 const axios = require("axios");
@@ -46,7 +46,6 @@ var Image = observer(class Image extends Component {
   }
 
   getSignedRequest(file){
-    const xhr = new XMLHttpRequest();
     return new Promise((resolve, reject) => {
       axios.get(`/sign-s3?file-name=${file.name}&file-type=${file.type}&file-size=${file.size}`)
       .then((res) => {
@@ -71,7 +70,7 @@ var Image = observer(class Image extends Component {
     return (
       <div>
         <Grid item>
-        <img style={{width: '100px', height: 'auto'}} id="preview" src="/images/default.png"/>      
+        <img alt="avatar" style={{width: '100px', height: 'auto'}} id="preview" src="/images/default.png"/>      
         <input type="hidden" id="avatar-url" name="avatar-url" value="/images/default.png"/>
           
         </Grid>
@@ -81,7 +80,6 @@ var Image = observer(class Image extends Component {
                 type="file" 
                 id="file-input" 
                 name="file-input"
-                lineDirection="center"
               />
           </Grid>
           {this.state.message}

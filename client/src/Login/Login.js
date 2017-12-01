@@ -59,7 +59,6 @@ var Login = observer(class Login extends Component {
             <TextField
               id="email"
               label="Email"
-              lineDirection="center"
               placeholder="you@something.com"
               onChange={this.inputemailChange}
               value={this.state.email}
@@ -70,7 +69,6 @@ var Login = observer(class Login extends Component {
             <TextField
               id="password"
               label="Confirm Password"
-              lineDirection="center"
               placeholder="abc123"
               onChange={this.inputpasswordChange}
               value={this.state.password}

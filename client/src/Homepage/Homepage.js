@@ -1,4 +1,4 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';  
 import Countdown from 'react-countdown-now';
@@ -8,7 +8,7 @@ import Users from '../Coffee/Users';
 import Steps from '../Coffee/Steps';
 import History from '../Coffee/History';
 import Feature1 from './Feature1'
-import { Grid, TextField, Button } from 'material-ui';
+import { Grid, Button } from 'material-ui';
 
 
 var axios = require('axios')
@@ -92,25 +92,31 @@ var Homepage = observer(class Homepage extends Component {
 }
 
   render() {
-
+    const currentDate = new Date();
+    
+    const year = (currentDate.getMonth() === 11 && currentDate.getDate() > 23) ? currentDate.getFullYear() + 1 : currentDate.getFullYear();
     if (this.props.userStore.user && this.state.clock == false) {
-    return (
-      <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
-      <Grid container>
-      <Grid item style={{width:'50%'}}>
-        <p>Queued for coffee:</p>
-        <Users/>
-        <Button color="primary"  onClick={this.addCup}>+ Add a cup!
-        </Button> 
-        </Grid><Grid item style={{width:'50%'}}>
-        <Button color="primary" raised onClick={this.startBrew}>Start Brew</Button>
-        </Grid>
-        </Grid>
-        {/* <History/> */}
-      </div>
-    )} else if (this.props.userStore.user && this.state.clock == true) {
+      let disableBrewStatus = (this.props.userStore.user.totalCount) ? false : true;
+      let disableAddStatus = (this.props.userStore.user.totalCount === 12) ? true : false;
+      
       return (
-        <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1em'}}>
+        <div className="container">
+        <Grid container>
+        <Grid item style={{width:'50%'}}>
+          <p>Queued for coffee:</p>
+          <Users/>
+          <Button color="primary" disabled={disableAddStatus} onClick={this.addCup}>+ Add a cup!
+          </Button> 
+          </Grid><Grid item style={{width:'50%'}}>
+          <Button color="primary" disabled={disableBrewStatus} raised onClick={this.startBrew}>Start Brew</Button>
+          </Grid>
+          </Grid>
+          <History/>
+        </div>
+      )
+    } else if (this.props.userStore.user && this.state.clock == true) {
+      return (
+        <div className="container">
           <Loading />
           <div className='sr-only'>
           <Countdown
@@ -136,7 +142,7 @@ var Homepage = observer(class Homepage extends Component {
           <p style={{ color: '#fff', fontSize: '1.5em', fontWeight: 300}}>Get your piece of the Coffee Pot "Pi"</p>
           </div>
           </div> 
-          <div style={{maxWidth:'1100px', margin: '0 auto', padding: '1.5em'}}>
+          <div className="container">
 
             <h2>Revolutionize your coffee process</h2>
             <Steps/>

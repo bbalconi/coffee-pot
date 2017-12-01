@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react'; 
 import InteractiveList from './InteractiveList'
-const axios = require('axios');
 
 var History = observer(class History extends Component {
   render() {

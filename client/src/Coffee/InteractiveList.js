@@ -41,6 +41,7 @@ class InteractiveList extends React.Component {
     const { dense, secondary } = this.state;
 
     let historyHTML=[];
+    console.log(this.props.users)
     this.props.users.forEach((element, i) => { 
       historyHTML.push(<InteractiveListItem {...element} key={'list'+i} />);
     });

@@ -6,13 +6,25 @@ import InteractiveList from './InteractiveList'
 var History = observer(class History extends Component {
   render() {
     let history = this.props.historyStore.retrieveUsers();
-   
-    return (
-      <div>
-        <hr/>
-        <InteractiveList users={history} />     
-      </div>
-    );
+  
+
+    if (history) {
+      if (history.length > 0) {
+        return (
+          <div>
+            <InteractiveList users={history} />     
+          </div>
+        );
+        } else {
+          return (
+            <p>Loading...</p>
+          )
+        }
+      } else {
+      return( 
+        <div>   </div>
+      )
+    }
   }
 })
 

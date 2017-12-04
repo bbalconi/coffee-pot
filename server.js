@@ -271,15 +271,61 @@ const S3_BUCKET = process.env.S3_BUCKET;
   }
 });
 
+function sendEmail(name, email) {
+  console.log('gonnna send an email to ', name, email);
+  'use strict';
+  const nodemailer = require('nodemailer');
+  
+  // Generate test SMTP service account from ethereal.email
+  // Only needed if you don't have a real mail account for testing
+  nodemailer.createTestAccount((err, account) => {
+  
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true, // true for 465, false for other ports
+          auth: {
+              user: process.env.GMAIL_ACCOUNT, // generated ethereal user
+              pass: process.env.GMAIL_PASSWORD  // generated ethereal password
+          }
+      });
+  
+      // setup email data with unicode symbols
+      let mailOptions = {
+          from: '"Coffee Pot Pi" <noreply.coffee.pot.pi@gmail.com>', // sender address
+          to: email, // list of receivers
+          subject: 'Your on your way to fresh coffee', // Subject line
+          text: `Confirm your email address: http://coffee-pot-pi.herokuapp.com/confirm/${email}/ZYX`, // plain text body
+          html: `<b><a href=http://coffee-pot-pi.herokuapp.com/confirm/${email}/ZYX>Confirm your email address</a></b>` // html body
+      };
+  
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          console.log('Message sent: %s', info.messageId);
+          // Preview only available when sending through an Ethereal account
+          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+  
+          // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@blurdybloop.com>
+          // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+      });
+  });
+}
+
 app.post('/signup', (req, res, next) => {
   let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
-  pool.query(query, (err, user) => {
-
-    
-  if (err) throw err;
+  pool.query(query, (err, user) => {    
+  if (err) { throw err; } else {
+    sendEmail(req.body.firstName, req.body.email);
+  }
     res.json(user.rows);
   });    
 });
+
+sendEmail('Jeanine', 'jeanine.mt@gmail.com')
 
 app.get('/history', (req, res, next) => {
   let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 AND DATE_PART('day', NOW() - added_at) < 1 ORDER BY added_at DESC`  

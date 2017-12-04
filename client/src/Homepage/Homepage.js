@@ -58,7 +58,6 @@ var Homepage = observer(class Homepage extends Component {
       this.socket = openSocket(socketUrl)
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
-        console.log(data)
         if (data.length == 0) {
           this.setState({
             clock: true

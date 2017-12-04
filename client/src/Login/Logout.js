@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 var Logout = observer(class Logout extends Component {
 
   componentDidMount() {
-    console.log('log out')
       this.props.userStore.logout()
   }
   render () {

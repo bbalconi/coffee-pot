@@ -85,8 +85,6 @@ passport.deserializeUser((id, done) => {
     function getCurrentCoffee() {
       let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
       pool.query(query, (err, rows) => {
-        console.log(rows.rows)
-        console.log('cocksucker')
         data = rows.rows;
         ioServer.emit('postedCup', data);
         let totalQuery = `select sum(cupcount) from history where status = 0;`;
@@ -96,20 +94,6 @@ passport.deserializeUser((id, done) => {
         })
       })
     }
-
-    // function brewBlaster() {
-    //   console.log('push push push push')
-    //   let query = `SELECT users.firstname, users.image, history.cupcount, users.id, history.status FROM users INNER JOIN history ON users.id = history.userid WHERE history.status = 0`;
-    //   pool.query(query, (err, rows) => {
-    //     data = rows.rows;
-    //     ioServer.emit('brewBlaster', data);
-    //     let totalQuery = `select sum(cupcount) from history where status = 0;`;
-    //     pool.query(totalQuery, (err, rows) => {
-    //       let sum = rows.rows[0].sum
-    //       ioServer.emit('cupToPi', sum);
-    //     })
-    //   })
-    // }
 
     client.on('piDisconnected', ()=>{
       console.log(':)')
@@ -124,6 +108,9 @@ passport.deserializeUser((id, done) => {
     client.on('/postcup', (data) => {
       let checkUserCt = `SELECT * FROM history WHERE userid = ${data.userid} AND status = 0`;
       pool.query(checkUserCt, (err, rows)=>{
+        console.log('0000000')
+        console.log(rows)
+        console.log('0000000')        
         // if user in current brew state
         if (rows.rowCount > 0) {
           let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`
@@ -268,7 +255,6 @@ const S3_BUCKET = process.env.S3_BUCKET;
 });
 
 app.post('/signup', (req, res, next) => {
-  // console.log(req.body)
   let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
   pool.query(query, (err, user) => {
 
@@ -305,8 +291,6 @@ app.get("/*", function(req, res) {
 });
 
 var port = process.env.PORT || 5000;
-console.log(port)
-console.log('PORT')
 server.listen(port, () => {
   console.log('listening on port ' + port);
 });    

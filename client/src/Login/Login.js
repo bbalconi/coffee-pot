@@ -18,7 +18,6 @@ var Login = observer(class Login extends Component {
     }
   }
   inputemailChange(event) {
-    console.log(event);
     this.setState({ email: event.target.value });
   }
   inputpasswordChange(event) {
@@ -30,7 +29,6 @@ var Login = observer(class Login extends Component {
         if (this.props.userStore.user.found) {
         this.props.history.push("/");
       } else {
-        console.log(this.props.userStore.user.message)
         this.setState({
           message: this.props.userStore.user.message
         })

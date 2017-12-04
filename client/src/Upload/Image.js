@@ -27,7 +27,6 @@ var Image = observer(class Image extends Component {
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
-          console.log(url)
           document.getElementById('preview').src = url;
           document.getElementById('avatar-url').value = url;
           this.setState({
@@ -49,7 +48,6 @@ var Image = observer(class Image extends Component {
     return new Promise((resolve, reject) => {
       axios.get(`/sign-s3?file-name=${file.name}&file-type=${file.type}&file-size=${file.size}`)
       .then((res) => {
-        console.log(res.data);
         this.props.userStore.imageurl = res.data.url
         this.uploadFile(file, res.data.signedRequest, res.data.url);
         resolve();
@@ -58,7 +56,6 @@ var Image = observer(class Image extends Component {
   }
   initUpload() {
     const files = document.getElementById('file-input').files;
-    console.log(files);
     const file = files[0];
     if(file == null){
       return alert('No file selected.');

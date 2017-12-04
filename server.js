@@ -272,7 +272,6 @@ const S3_BUCKET = process.env.S3_BUCKET;
 });
 
 function sendEmail(name, email) {
-  console.log('gonnna send an email to ', name, email);
   'use strict';
   const nodemailer = require('nodemailer');
   
@@ -292,12 +291,20 @@ function sendEmail(name, email) {
       });
   
       // setup email data with unicode symbols
+      let entry = (name !== '') ? 'Hey ' + name.charAt(0).toUpperCase() + name.slice(1) + ', ' : "Hey, " 
       let mailOptions = {
           from: '"Coffee Pot Pi" <noreply.coffee.pot.pi@gmail.com>', // sender address
-          to: email, // list of receivers
-          subject: 'Your on your way to fresh coffee', // Subject line
-          text: `Confirm your email address: http://coffee-pot-pi.herokuapp.com/confirm/${email}/ZYX`, // plain text body
-          html: `<b><a href=http://coffee-pot-pi.herokuapp.com/confirm/${email}/ZYX>Confirm your email address</a></b>` // html body
+        to: email, // list of receivers
+        subject: 'Your on your way to fresh coffee', // Subject line
+        text: `${entry} thanks for signing up with Coffee Pot Pi! You must follow this link to activate your account:  http://coffee-pot-pi.herokuapp.com/confirm/${email}/ZYX`, // plain text body
+        html: `
+          <a href="http://coffee-pot-pi.herokuapp.com"><img src="http://coffee-pot-pi.herokuapp.com/images/logo-primary-crop.png" alt="Coffee Pot Pi"></a><br/><br/>
+          ${entry} thanks for signing up with Coffee Pot Pi! You must follow this link to activate your account:<br/><br/>
+          http://coffee-pot-pi.herokuapp.com/confirm/${email}/ZYX<br/><br/>
+          Have fun, and don't hesitate to contact us with your feedback.<br/><br/>
+          The Coffee Pot Pi Team<br/>
+          http://coffee-pot-pi.herokuapp.com
+          ` // html body
       };
   
       // send mail with defined transport object
@@ -306,11 +313,6 @@ function sendEmail(name, email) {
               return console.log(error);
           }
           console.log('Message sent: %s', info.messageId);
-          // Preview only available when sending through an Ethereal account
-          console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-  
-          // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@blurdybloop.com>
-          // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
       });
   });
 }
@@ -324,8 +326,6 @@ app.post('/signup', (req, res, next) => {
     res.json(user.rows);
   });    
 });
-
-sendEmail('Jeanine', 'jeanine.mt@gmail.com')
 
 app.get('/history', (req, res, next) => {
   let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 AND DATE_PART('day', NOW() - added_at) < 1 ORDER BY added_at DESC`  

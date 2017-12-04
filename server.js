@@ -296,7 +296,7 @@ app.post('/history', (req, res, next) => {
   });    
 });
 
-app.get('lastBrew', (req,res, next) => {
+app.get('/lastBrew', (req,res, next) => {
   console.log('????????')
   let timeQuery = `SELECT ts FROM lastbrew  ORDER BY ts DESC LIMIT 1`;
   pool.query(timeQuery, (err, rows) =>{

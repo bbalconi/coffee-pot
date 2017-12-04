@@ -8,14 +8,15 @@ export default class UserStore {
     extendObservable(this, {
       user: null,
       message: '',
+      lastbrew: null,
       notify: 'denied',
       get retrieveUser() {
         return this.user
       }
-
-      
     });
-
+    axios.get('/lastBrew').then((res) => {
+      this.lastbrew = res.data
+    })    
     if (Notification.permission !== "granted") {
         Notification.requestPermission().then(function(result) {
           Notification.permission = result;

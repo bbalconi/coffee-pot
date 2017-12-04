@@ -29,7 +29,6 @@ var Chips = observer(class Chips extends Component {
   // }
 
   renderChip(data) {
-    // console.log(data)
     const { classes } = this.props
     if (data) { 
     if (data.image) {

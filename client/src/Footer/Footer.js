@@ -6,6 +6,7 @@ export default class Footer extends Component {
     super()
   }
   render() {
+    console.log(this.props)
     return (
       <div className="footer" style={{ justifyContent: 'space-between', backgroundColor: '#333', paddingTop: 30, paddingBottom: 30, paddingLeft: '1.5em', paddingRight: '1.5em', color: '#fff'}}>
         <div className="footer-container container" style={{display: 'flex'}}>

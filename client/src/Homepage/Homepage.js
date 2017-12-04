@@ -86,6 +86,9 @@ var Homepage = observer(class Homepage extends Component {
           this.props.userStore.user.users = [];
         }
         })
+      this.socket.on('endBrew', (data) => {
+        this.props.userStore.lastbrew = data;
+      })
   })
 }
 

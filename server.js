@@ -131,6 +131,11 @@ passport.deserializeUser((id, done) => {
       pool.query(startQuery, (err, rows) => {
         getCurrentCoffee();
       })
+      let timeQuery = `INSERT INTO lastbrew (ts, last) values (CURRENT_TIMESTAMP, 0)`
+      pool.query(timeQuery, (err, rows) => {
+        if (err) throw err;
+        console.log(rows);
+    })
     })
 
     client.on('/endBrew', (data) => {
@@ -138,6 +143,13 @@ passport.deserializeUser((id, done) => {
       pool.query(startQuery, (err, rows) => {
         if (err) throw err;
           ioServer.emit('cupToPi', 0);
+      })
+      let endQuery = `SELECT ts FROM lastbrew  ORDER BY ts DESC LIMIT 1`;
+      pool.query(endQuery, (err, rows) => {
+        if (err) throw err;
+        console.log(rows.rows[0])
+        let data = rows.rows[0]
+        ioServer.emit('endBrew', data)
       })
     })
 
@@ -159,6 +171,10 @@ passport.deserializeUser((id, done) => {
           pool.query(sumQuery, (err, rows) => {
             sum = rows.rows[0].sum
             let query = `SELECT * FROM history where userid = ${user.id} and status = 0`;
+            let timeQuery = `SELECT ts FROM lastbrew  ORDER BY ts DESC LIMIT 1`;
+            pool.query(timeQuery, (err, rows) => {
+              lastbrew = rows.rows[0]
+
             pool.query(query, (error, rows) => {
               if (error) throw error;
               if (rows.rowCount > 0) {
@@ -173,7 +189,8 @@ passport.deserializeUser((id, done) => {
               pool.query(userQuery, (error, users) => {
                 if (error) throw error;
                 theseUsers = users.rows;
-                res.json({ 
+                res.json({
+                  lastbrew: lastbrew, 
                   users: theseUsers,
                   found: true, 
                   success: true, 
@@ -184,6 +201,7 @@ passport.deserializeUser((id, done) => {
                   email: user.email, 
                   firstName: user.firstname, 
                   lastName: user.lastname })
+                })
               })
             })
           })
@@ -277,6 +295,18 @@ app.post('/history', (req, res, next) => {
     if (err) throw err;
     res.json(users.rows);
   });    
+});
+
+app.get('/lastBrew', (req,res, next) => {
+  console.log('????????')
+  let timeQuery = `SELECT ts FROM lastbrew  ORDER BY ts DESC LIMIT 1`;
+  pool.query(timeQuery, (err, rows) =>{
+    console.log('is this running)')
+    if (err) throw err;
+    let data = rows.rows[0]
+    console.log(rows)    
+    res.json(data)
+  })
 });
 
 app.post('/logout', (req, res) => {

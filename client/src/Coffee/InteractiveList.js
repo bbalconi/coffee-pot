@@ -41,6 +41,12 @@ class InteractiveList extends React.Component {
     const { dense, secondary } = this.state;
 
     let historyHTML=[];
+    if (this.props.users) {
+      this.props.users.forEach((element, i) => { 
+        historyHTML.push(<InteractiveListItem {...element} key={'list'+i} />);
+      });
+    }
+
     return (
       <div className={classes.root}>
        <Grid container> 

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-
 import { Grid, TextField, Button } from 'material-ui';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -34,7 +33,6 @@ var Login = observer(class Login extends Component {
         })
       }
       }).catch(e => {
-        console.log(e);
         console.log(e.message)
         this.setState({
           message: e.message

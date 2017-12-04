@@ -41,6 +41,7 @@ var Homepage = observer(class Homepage extends Component {
   }
 
   addCup(){
+    console.log(this.props.userStore.user.userCupcount)    
     if (this.props.userStore.user.userCupcount <= 11) {
     this.props.userStore.user.userCupcount = this.props.userStore.user.userCupcount + 1;
     this.socket.emit('/postcup', {
@@ -59,6 +60,7 @@ var Homepage = observer(class Homepage extends Component {
       this.socket.emit('coffeeConnect', res)
       this.socket.on('postedCup', (data) => {
         if (data.length == 0) {
+          this.props.userStore.user.userCupcount = 0;
           this.setState({
             clock: true
           })

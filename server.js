@@ -106,11 +106,10 @@ passport.deserializeUser((id, done) => {
     });
 
     client.on('/postcup', (data) => {
+      console.log(data)
+      console.log('////postcupppppp/////')
       let checkUserCt = `SELECT * FROM history WHERE userid = ${data.userid} AND status = 0`;
       pool.query(checkUserCt, (err, rows)=>{
-        console.log('0000000')
-        console.log(rows)
-        console.log('0000000')        
         // if user in current brew state
         if (rows.rowCount > 0) {
           let updateQuery = `UPDATE history SET cupcount = ${data.cupcount} where userid = ${data.userid} RETURNING cupcount`

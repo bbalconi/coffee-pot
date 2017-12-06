@@ -295,7 +295,7 @@ function sendEmail(name, email) {
       let mailOptions = {
           from: '"Coffee Pot Pi" <noreply.coffee.pot.pi@gmail.com>', // sender address
         to: email, // list of receivers
-        subject: 'Your on your way to fresh coffee', // Subject line
+        subject: `☕ You're on your way to fresh coffee`, // Subject line
         text: `${entry} thanks for signing up with Coffee Pot Pi! You must follow this link to activate your account:  http://coffee-pot-pi.herokuapp.com/confirm/${email}/ZYX`, // plain text body
         html: `
           <a href="http://coffee-pot-pi.herokuapp.com"><img src="http://coffee-pot-pi.herokuapp.com/images/logo-primary-crop.png" alt="Coffee Pot Pi"></a><br/><br/>

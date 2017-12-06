@@ -13,11 +13,8 @@ var cookieParser = require('cookie-parser');
 var path  = require('path');
 const { Pool } = require('pg');
 const AWS = require('aws-sdk');
-// var fs = require('fs');
 
 require('dotenv').config();
-
-
 
 const pool = new Pool({
   user: process.env.ELEPHANT_DB_USER,
@@ -26,8 +23,6 @@ const pool = new Pool({
   password: process.env.ELEPHANT_DB_PASSWORD,
   port: 5432
 });
-
-
  
 var allowedOrigins = "http://localhost:* http://192.168.*.*:* https://coffee-pot-pi.herokuapp.com:*";
 var ioServer = io(server, {
@@ -223,15 +218,11 @@ app.post('/socketUrl', (req, res)=>{
   }
 });
 
-
-
-
 /*
  * Respond to GET requests to /sign-s3.
  * Upon request, return JSON containing the temporarily-signed S3 request and
  * the anticipated URL of the image.
  */
-
 app.get('/sign-s3', (req, res) => {
   //const s3 = new aws.S3();
 const S3_BUCKET = process.env.S3_BUCKET;
@@ -278,7 +269,6 @@ function sendEmail(name, email) {
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
   nodemailer.createTestAccount((err, account) => {
-  
       // create reusable transporter object using the default SMTP transport
       let transporter = nodemailer.createTransport({
           host: 'smtp.gmail.com',
@@ -312,7 +302,7 @@ function sendEmail(name, email) {
           if (error) {
               return console.log(error);
           }
-          console.log('Message sent: %s', info.messageId);
+          //console.log('Message sent: %s', info.messageId);
       });
   });
 }
@@ -344,10 +334,8 @@ app.post('/history', (req, res, next) => {
 });
 
 app.get('/lastBrew', (req,res, next) => {
-  console.log('????????')
   let timeQuery = `SELECT ts FROM lastbrew  ORDER BY ts DESC LIMIT 1`;
   pool.query(timeQuery, (err, rows) =>{
-    console.log('is this running)')
     if (err) throw err;
     let data = rows.rows[0]
     console.log(rows)    

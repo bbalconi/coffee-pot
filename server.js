@@ -13,11 +13,8 @@ var cookieParser = require('cookie-parser');
 var path  = require('path');
 const { Pool } = require('pg');
 const AWS = require('aws-sdk');
-// var fs = require('fs');
 
 require('dotenv').config();
-
-
 
 const pool = new Pool({
   user: process.env.ELEPHANT_DB_USER,
@@ -26,8 +23,6 @@ const pool = new Pool({
   password: process.env.ELEPHANT_DB_PASSWORD,
   port: 5432
 });
-
-
  
 var allowedOrigins = "http://localhost:* http://192.168.*.*:* https://coffee-pot-pi.herokuapp.com:*";
 var ioServer = io(server, {
@@ -223,15 +218,11 @@ app.post('/socketUrl', (req, res)=>{
   }
 });
 
-
-
-
 /*
  * Respond to GET requests to /sign-s3.
  * Upon request, return JSON containing the temporarily-signed S3 request and
  * the anticipated URL of the image.
  */
-
 app.get('/sign-s3', (req, res) => {
   //const s3 = new aws.S3();
 const S3_BUCKET = process.env.S3_BUCKET;
@@ -271,12 +262,57 @@ const S3_BUCKET = process.env.S3_BUCKET;
   }
 });
 
+function sendEmail(name, email) {
+  'use strict';
+  const nodemailer = require('nodemailer');
+  
+  // Generate test SMTP service account from ethereal.email
+  // Only needed if you don't have a real mail account for testing
+  nodemailer.createTestAccount((err, account) => {
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+          host: 'smtp.gmail.com',
+          port: 465,
+          secure: true, // true for 465, false for other ports
+          auth: {
+              user: process.env.GMAIL_ACCOUNT, // generated ethereal user
+              pass: process.env.GMAIL_PASSWORD  // generated ethereal password
+          }
+      });
+  
+      // setup email data with unicode symbols
+      let entry = (name !== '') ? 'Hey ' + name.charAt(0).toUpperCase() + name.slice(1) + ', ' : "Hey, " 
+      let mailOptions = {
+          from: '"Coffee Pot Pi" <noreply.coffee.pot.pi@gmail.com>', // sender address
+        to: email, // list of receivers
+        subject: `☕ You're on your way to fresh coffee`, // Subject line
+        text: `${entry} thanks for signing up with Coffee Pot Pi! You must follow this link to activate your account:  http://coffee-pot-pi.herokuapp.com/confirm/${email}/ZYX`, // plain text body
+        html: `
+          <a href="http://coffee-pot-pi.herokuapp.com"><img src="http://coffee-pot-pi.herokuapp.com/images/logo-primary-crop.png" alt="Coffee Pot Pi"></a><br/><br/>
+          ${entry} thanks for signing up with Coffee Pot Pi! You must follow this link to activate your account:<br/><br/>
+          http://coffee-pot-pi.herokuapp.com/confirm/${email}/ZYX<br/><br/>
+          Have fun, and don't hesitate to contact us with your feedback.<br/><br/>
+          The Coffee Pot Pi Team<br/>
+          http://coffee-pot-pi.herokuapp.com
+          ` // html body
+      };
+  
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+              return console.log(error);
+          }
+          //console.log('Message sent: %s', info.messageId);
+      });
+  });
+}
+
 app.post('/signup', (req, res, next) => {
   let query = `INSERT INTO users (firstname, lastname, email, password, image) values ('${req.body.firstName}', '${req.body.lastName}', '${req.body.email}', '${passwordHash.generate(req.body.password)}', '${req.body.image}') RETURNING id, firstname, lastname, email, id, image`  
-  pool.query(query, (err, user) => {
-
-    
-  if (err) throw err;
+  pool.query(query, (err, user) => {    
+  if (err) { throw err; } else {
+    sendEmail(req.body.firstName, req.body.email);
+  }
     res.json(user.rows);
   });    
 });
@@ -298,10 +334,8 @@ app.post('/history', (req, res, next) => {
 });
 
 app.get('/lastBrew', (req,res, next) => {
-  console.log('????????')
   let timeQuery = `SELECT ts FROM lastbrew  ORDER BY ts DESC LIMIT 1`;
   pool.query(timeQuery, (err, rows) =>{
-    console.log('is this running)')
     if (err) throw err;
     let data = rows.rows[0]
     console.log(rows)    

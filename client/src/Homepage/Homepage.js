@@ -41,7 +41,6 @@ var Homepage = observer(class Homepage extends Component {
   }
 
   addCup(){
-    console.log(this.props.userStore.user.userCupcount)    
     if (this.props.userStore.user.userCupcount <= 11) {
     this.props.userStore.user.userCupcount = this.props.userStore.user.userCupcount + 1;
     this.socket.emit('/postcup', {

@@ -18,6 +18,7 @@ import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
 import Loading from './Coffee/Loading';
 import UserHistory from './Coffee/UserHistory';
 import Footer from './Footer/Footer';
+import Confirm from './Confirm/Confirm';
 
 const theme = createMuiTheme({
   palette: {
@@ -53,6 +54,7 @@ class App extends Component {
                   <Route path='/logout' render={() => <Logout /> }/>
                   <Route path='/loading' render={() => <Loading /> }/>
                   <Route path='/profile' render={() => <UserHistory /> }/>
+                  <Route path='/confirm/:email/:confirm' render={() => <Confirm /> }/>
                   </div>
                 </div>
                 <Footer /> 

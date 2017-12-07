@@ -325,6 +325,10 @@ app.get('/history', (req, res, next) => {
   });    
 });
 
+app.get('/confirm/:email/:code', (req, res, next) => {
+    res.json({msg: '√ Your email has been confirmed.'});
+});
+
 app.post('/history', (req, res, next) => {
   let query = `SELECT users.id, users.firstname, users.lastname, history.cupcount, history.added_at, users.image FROM history  INNER JOIN users ON users.id = history.userid WHERE status = 2 AND users.id = ${req.body.userid} ORDER BY added_at DESC`  
   pool.query(query, (err, users) => {

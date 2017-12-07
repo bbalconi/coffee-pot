@@ -19,6 +19,7 @@ var Footer = observer( class Footer extends Component {
         <div className="footer-container container" style={{display: 'flex'}}>
           <div style={{flex: 1}}>
             <ul>
+              
               <li><Link style={{color: '#ccc'}} to="/">Coffee Pot Pi</Link></li>
               <li><Link style={{color: '#ccc'}} to="/login">Login</Link></li>
               <li><Link style={{color: '#ccc'}} to="/signup">Signup</Link></li>
